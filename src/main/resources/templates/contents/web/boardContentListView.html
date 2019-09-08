@@ -1,0 +1,32 @@
+<!-- 게시판 리스트 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <table>
+        <tr>
+            <td>번호</td>
+            <td>제목</td>
+            <td>등록자</td>
+            <td>등록일</td>
+        </tr>
+        <th:block th:each="boardContent : ${board.boardContentList}">
+            <tr>
+                <td th:text="${boardContent.boardContentId}"></td>
+                <td th:text="${boardContent.title}"></td>
+                <td th:text="${boardContent.author}"></td>
+                <td th:text="${boardContent.addDate}"></td>
+            </tr>
+        </th:block>
+    </table>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <!-- Site Properties -->
+    <title>Bootstrap 4 Register Form</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="container">
+        <form class="form-horizontal p-5 my-5" role="form" method="PUT" action="#"
+              th:action="@{/user/update/} + ${customUserDetails.id}" th:object="${customUserDetails}">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <h2>User Account Information</h2>
+                    <hr>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="username">Username</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
+                            <input type="text" name="username" class="form-control" id="username"
+                                   placeholder="input Username" required autofocus th:field="*{username}"
+                                   th:value="*{username}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="row">
+                <div class="col-md-3 field-label-responsive">
+                    <label>Account Authorities</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-unlock-alt"></i></div>
+                            <select th:field="*{authorities}">
+                                <th:block sec:authorize="hasAuthority('ADMIN')">
+                                    <option th:value="'ADMIN'" th:text="ADMIN"></option>
+                                </th:block>
+                                <option th:value="'MEMBER'" th:text="MEMBER"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-success"><i class="fa fa-user-plus"></i>Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -19,13 +19,55 @@ repositories {
 }
 
 dependencies {
+
+	/** Spring Data **/
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis'
+
+	// https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis
+	compile group: 'org.springframework.session', name: 'spring-session-data-redis'
+
+
+	/** Spring Security **/
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+
+	/** Thymeleaf **/
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	// https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5
+	compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5', version: '3.0.4.RELEASE'
+	// https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect
+	compile group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '2.4.1'
+
+
+	/** Web **/
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+
+	/** Web Jars **/
+	/* Bootstrap */
+	compile 'org.webjars:bootstrap:4.3.1'
+
+	/* JQuery */
+	compile 'org.webjars:jquery:3.4.0'
+
+	// https://mvnrepository.com/artifact/org.webjars/popper.js
+	compile group: 'org.webjars', name: 'popper.js', version: '1.15.0'
+
+
+	/** Lombok **/
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
+
+
+	/** DB **/
+	// https://mvnrepository.com/artifact/com.h2database/h2
+	compile group: 'com.h2database', name: 'h2', version: '1.4.199'
+
+
+	/** Test **/
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }

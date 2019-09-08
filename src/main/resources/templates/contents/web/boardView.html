@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+
+<head>
+    <title>Community Page</title>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <main role="main" class="container">
+
+        <a href="#" th:href="@{/community/freeBoard/board/add}" class="btn btn-success">글쓰기</a>
+
+        <!-- 게시글 출력 -->
+        <th:block th:each="boardContent : ${board.boardContentList}">
+            <div class="my-1 p-1 bg-white rounded shadow-sm board">
+
+                <div class="media text-muted pt-3">
+                    <div class="media-body pb-3 mb-0 small lh-125 border-gray">
+                        <div class="justify-content-between align-items-center w-100">
+                            <strong class="text-gray-dark" th:text="${boardContent.author}">Board Author</strong>
+                            <strong class="text-gray-dark" th:text="'(작성시간 : ' + ${boardContent.addDate} + ')'">boardContent
+                                AddDate</strong>
+                            <strong class="text-gray-dark"
+                                    th:text="'(최종수정시간 : ' + ${boardContent.lastModifyDate} + ')'">boardContent
+                                LastModifyDate</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <h6 class="border-bottom border-gray pb-2 mb-0" th:text="${board.subject}">Board Subject</h6>
+                <span th:utext="${board.content}">Board Content</span>
+            </div>
+
+            <!-- 해당 게시글 댓글 출력 -->
+            <th:block th:with="replyList = ${board.replyList}, replyDepth = 0">
+                <!-- 댓글 리스트 -->
+                <div th:fragment="replyBoard">
+                    <!-- 존재하는 댓글을 루프를 돌면서 출력 -->
+                    <th:block th:each="reply : ${replyList}">
+                        <!-- 댓글 컨테이너 -->
+                        <div class="media text-muted pt-3">
+                            <!-- 자식댓글에 대한 Depth에 따라 공백과 이미지 출력 -->
+                            <th:block th:each="replyDepth, iterator : ${#numbers.sequence(0, replyDepth)}">
+                                <th:block th:if="${replyDepth} > 0">
+                                    <th:block th:if="${iterator.last}">
+                                        <!-- 이미지 중앙 정렬을 쉽게 하기위해 스타일을 부여한 p태그로 래핑 -->
+                                        <p style="text-align: center;">
+                                            <img th:src="@{/resources/img/board/replyDepth.jpg}">
+                                        </p>
+                                    </th:block>
+                                </th:block>
+                            </th:block>
+
+                            <!-- 댓글 사진 -->
+                            <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32"
+                                 xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"
+                                 focusable="false"
+                                 role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#007bff"></rect>
+                                <text x="50%" y="50%" fill="#007bff" dy=".3em"></text>
+                            </svg>
+
+                            <!-- 댓글 내용 -->
+                            <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                                <div class="justify-content-between align-items-center w-100">
+                                    <strong class="text-gray-dark" th:text="${reply.author}">Reply Author</strong>
+                                    <strong class="text-gray-dark" th:text="'(작성시간 : ' + ${reply.addDate} + ')'">Board
+                                        Author</strong>
+                                    <strong class="text-gray-dark"
+                                            th:text="'(최종수정시간 : ' + ${reply.lastModifyDate} + ')'">Board Author</strong>
+                                </div>
+                                <span class="d-block" th:utext="${reply.content}">Reply Content</span>
+                                <!-- 댓글에 대한 댓글 -->
+                                <a href="javascript:;" th:onclick="|addChildReply('${reply.id}');|">댓글에 댓글 달기</a>
+                            </div>
+                        </div>
+
+                        <!-- 자식 댓글을 thymeleaf 의 기능을 사용해 Recursive하게 출력 -->
+                        <div th:with="replyList = ${reply.children}, replyDepth = ${replyDepth} + 1"
+                             th:include="content/community/freeboard/home :: replyBoard"></div>
+                    </th:block>
+                </div>
+            </th:block>
+
+            <!-- 게시글에 대한 댓글 등록(최상위 부모 댓글) -->
+            <!-- 로그인한 사람만 작성 가능-->
+            <div sec:authorize="isAuthenticated()">
+                <form action="#" th:action="@{/community/freeBoard/reply/add}" method="post"
+                      enctype="multipart/form-data">
+                    <input type="hidden" name="board.id" th:value="${board.id}"/>
+
+                    <!-- 댓글 입력 폼 -->
+                    <textarea class="summernote" name="replyContent"></textarea>
+                    <input type="submit" th:value="등록"/>
+                </form>
+            </div>
+        </th:block>
+    </main>
+
+    <!-- 비어있지 않은 경우에만 페이징 바 출력 -->
+    <!-- th:if는 조건이 true이면 출력 -->
+    <!-- th:unless는 조건이 true이면 미출력 -->
+    <th:block th:object="${boardList}">
+        <th:block th:unless="*{empty}">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+
+                    <!-- startPage : 페이징바 시작 번호 -->
+                    <!-- endPage : 페이징바 끝 번호 -->
+                    <!-- pageBarSize : 페이징바 번호 최대 갯수 -->
+                    <!-- pageable.pageNumber : 현재 페이지 인덱스 번호. page=1인 경우 0리턴 -->
+                    <!-- boardList.totalPages : 총 페이지 갯수 -->
+                    <th:block
+                            th:with="startPage = ${#numbers.formatDecimal(boardList.pageable.pageNumber / pageBarSize * pageBarSize + 1, 0, 0)  }">
+                        <th:block th:with="endPage = (${startPage} + ${pageBarSize} - 1)">
+
+                            <!-- 첫 번째 페이지면 'Previous' 버튼을 비활성화 -->
+                            <li class="page-item" th:classappend="*{first}?disabled">
+                                <!-- 페이징바 시작 번호 - pageBarSize로 이동-->
+                                <a class="page-link" href="#"
+                                   th:href="@{/community?page=__${startPage} - ${pageBarSize}__}"
+                                   tabindex="-1">Previous</a>
+                            </li>
+
+                            <!-- Thymeleaf에서 2/3은 Integer 타입이 아니므로, #numbers.formatDecial(number, 0 ,0)을 사용해 정수로 만들어야 함 -->
+                            <!-- endPage가 totalPages보다 큰 경우(맨 끝 페이지 그룹에서 pageBarSize보다 적은 수의 페이지가 남았을 때) totalPages 만큼만 보여줌 -->
+                            <th:block
+                                    th:each="i : ${#numbers.sequence(startPage, boardList.totalPages < endPage ? boardList.totalPages : endPage)}">
+                                <!-- 현재 해당하는 페이지 버튼에 색칠 -->
+                                <li class="page-item" th:classappend="(*{pageable.pageNumber} == (${i} - 1)) ? active">
+                                    <a class="page-link" href="#" th:href="@{/community?page=__${i}__}"
+                                       th:text="${i}"></a>
+                                </li>
+                            </th:block>
+
+                            <!-- 마지막 페이지면 'Next' 버튼을 비활성화-->
+                            <li class="page-item" th:classappend="*{last}?disabled">
+                                <!-- 페이징바 끝 번호 + 1 로 이동-->
+                                <a class="page-link" href="#" th:href="@{/community?page=__${endPage} + 1__}">Next</a>
+                            </li>
+
+                        </th:block>
+                    </th:block>
+                </ul>
+            </nav>
+        </th:block>
+    </th:block>
+
+    <script>
+    </script>
+
+</div>
+</body>
+</html>
