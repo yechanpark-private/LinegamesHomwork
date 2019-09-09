@@ -1,6 +1,8 @@
 package com.linegames.LinegamesHomwork.auth.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,6 +16,7 @@ import java.util.List;
  * 유저 정보 클래스
  */
 @Data
+@NoArgsConstructor
 @Entity
 public class CustomUserDetails implements UserDetails, Serializable {
     @Id
@@ -21,6 +24,7 @@ public class CustomUserDetails implements UserDetails, Serializable {
     private Long id;
 
     @Column(unique = true)
+    @NonNull
     private String username; // 닉네임
     private String password; // 패스워드
 

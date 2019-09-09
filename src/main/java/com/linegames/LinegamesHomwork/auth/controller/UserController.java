@@ -7,7 +7,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +17,6 @@ public class UserController {
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     /**
      * 유저 정보 뷰
@@ -59,19 +55,6 @@ public class UserController {
     @GetMapping("/findPassword")
     public String findPasswordGet() {
         return "contents/auth/findPasswordView";
-    }
-
-    /**
-     * 패스워드 찾기 검증 로직
-     */
-    @PostMapping("/findPassword")
-    public String findPasswordPost(
-            @ModelAttribute String username,
-            @ModelAttribute String password) {
-        CustomUserDetails retrivedUser = userDetailsService.loadUserByUsername(username);
-
-
-        return "redirect:/auth/login";
     }
 
 }

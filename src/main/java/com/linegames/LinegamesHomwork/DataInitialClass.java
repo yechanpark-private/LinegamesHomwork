@@ -1,7 +1,7 @@
 package com.linegames.LinegamesHomwork;
 
-import com.linegames.LinegamesHomwork.auth.model.CustomUserDetails;
 import com.linegames.LinegamesHomwork.auth.model.AuthorityEnum;
+import com.linegames.LinegamesHomwork.auth.model.CustomUserDetails;
 import com.linegames.LinegamesHomwork.auth.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
