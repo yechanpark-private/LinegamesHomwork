@@ -3,14 +3,11 @@ package com.linegames.LinegamesHomwork.auth.controller;
 import com.linegames.LinegamesHomwork.auth.model.CustomUserDetails;
 import com.linegames.LinegamesHomwork.auth.service.CustomUserDetailsService;
 import com.linegames.LinegamesHomwork.commons.APIResponse;
-import com.linegames.LinegamesHomwork.commons.exception.ErrorCodeEmum;
-import com.linegames.LinegamesHomwork.commons.exception.api.UserNotExistException;
+import com.linegames.LinegamesHomwork.commons.exception.ErrorCodeEnum;
+import com.linegames.LinegamesHomwork.commons.exception.api.APIException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/user/rest/")
@@ -27,14 +24,12 @@ public class UserRestController {
         CustomUserDetails customUserDetails = userDetailsService.loadUserByUsername(username);
 
         if (customUserDetails == null) {
-            throw new UserNotExistException(ErrorCodeEmum.USER_NOT_EXIST);
+            throw new APIException(ErrorCodeEnum.USER_NOT_EXIST);
         }
 
-        Map<String, String> apiResponseData = new HashMap<>();
-        apiResponseData.put("username", customUserDetails.getUsername());
-
         APIResponse apiResponse = new APIResponse();
-        apiResponse.setData(apiResponseData);
+        apiResponse.add("username", customUserDetails.getUsername());
+
         return apiResponse;
     }
 
@@ -46,17 +41,15 @@ public class UserRestController {
             @PathVariable("username") String username, @RequestBody CustomUserDetails customUserDetails) {
         CustomUserDetails retrievedUser = userDetailsService.loadUserByUsername(username);
 
-        if (retrievedUser == null )
-            throw new UserNotExistException(ErrorCodeEmum.USER_NOT_EXIST);
+        if ( retrievedUser == null )
+            throw new APIException(ErrorCodeEnum.USER_NOT_EXIST);
 
         retrievedUser.setPassword(passwordEncoder.encode(customUserDetails.getPassword()));
         userDetailsService.save(retrievedUser);
 
-        Map<String, String> apiResponseData = new HashMap<>();
-        apiResponseData.put("username", retrievedUser.getUsername());
-
         APIResponse apiResponse = new APIResponse();
-        apiResponse.setData(apiResponseData);
+        apiResponse.add("username", retrievedUser.getUsername());
+
         return apiResponse;
     }
 }

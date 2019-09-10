@@ -30,7 +30,7 @@ public class UserController {
     /**
      * 유저 정보 수정 로직
      */
-    @PutMapping("/update/{userId}")
+    @PostMapping("/update/{userId}")
     public String updateUserPost(
             @ModelAttribute("customUserDetails") CustomUserDetails modifiedCustomUserDetails,
             @PathVariable("userId") Long userId, Authentication authentication, Model model) {

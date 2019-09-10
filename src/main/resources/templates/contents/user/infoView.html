@@ -10,7 +10,7 @@
 
 <div layout:fragment="content">
     <div class="container">
-        <form class="form-horizontal p-5 my-5" role="form" method="PUT" action="#"
+        <form class="form-horizontal p-5 my-5" role="form" method="post" action="#"
               th:action="@{/user/update/} + ${customUserDetails.id}" th:object="${customUserDetails}">
             <div class="row">
                 <div class="col-md-3"></div>

@@ -1,6 +1,5 @@
-package com.linegames.LinegamesHomwork.web.controller;
+package com.linegames.LinegamesHomwork.web.controller.board;
 
-import com.linegames.LinegamesHomwork.commons.exception.web.BoardNotExistException;
 import com.linegames.LinegamesHomwork.commons.exception.web.WebException;
 import com.linegames.LinegamesHomwork.web.model.Board;
 import com.linegames.LinegamesHomwork.web.service.BoardService;
@@ -25,19 +24,23 @@ public class BoardController {
      * @param boardURI String 게시판 URI Path
      * @return viewName String 게시판 뷰
      */
-    @GetMapping("/{boardURI}")
+    @GetMapping("/get/{boardURI}")
     public String getBoard(@PathVariable("boardURI") String boardURI, Model model) throws WebException {
         Board board = boardService.findByBoardURI(boardURI);
-        System.out.println(board.getBoardURI());
+
         if (board == null)
-            throw new BoardNotExistException("Board Not Exist", "/");
+            throw new WebException("Board Not Exist", "/");
 
         model.addAttribute("board", board);
-        System.out.println(board.getBoardTitle());
-        System.out.println(board.getBoardContentList().get(0).getBoardContentId());
-        System.out.println(board.getBoardContentList().get(0).getTitle());
-        System.out.println(board.getBoardContentList().get(0).getAuthor());
-        System.out.println(board.getBoardContentList().get(0).getContent());
-        return "contents/web/boardContentListView";
+        return "contents/web/board/postListView";
     }
+
+    /**
+     * 게시판 추가 뷰
+     */
+    @GetMapping("/add")
+    public String addBoard() {
+        return "contents/web/board/addView";
+    }
+
 }

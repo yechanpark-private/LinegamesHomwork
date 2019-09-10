@@ -18,8 +18,8 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public APIExceptionResponse handleAPIException(APIException ex) {
         APIExceptionResponse exceptionResponse = new APIExceptionResponse();
-        exceptionResponse.setErrorCode(ex.getErrorCodeEmum().getErrorCode());
-        exceptionResponse.setErrorMessage(ex.getErrorCodeEmum().getErrorMessage());
+        exceptionResponse.setErrorCode(ex.getErrorCodeEnum().getErrorCode());
+        exceptionResponse.setErrorMessage(ex.getErrorCodeEnum().getErrorMessage());
         return exceptionResponse;
     }
 

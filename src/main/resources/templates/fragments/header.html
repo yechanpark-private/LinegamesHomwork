@@ -27,7 +27,7 @@
 
 <body>
 <nav th:fragment="nav" class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-    <a class="navbar-brand mr-auto mr-lg-0" href="#">YechanPark Linegames Homework</a>
+    <a class="navbar-brand mr-auto mr-lg-0" th:href="@{/}">YechanPark Linegames Homework</a>
     <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -40,27 +40,23 @@
                 <div id="nav-dropdown-menu" class="dropdown-menu" aria-labelledby="dropdown01">
                     <!-- ADMIN 만 보임 -->
                     <th:block sec:authorize="hasAuthority('ADMIN')">
-                        <a class="dropdown-item" href="#">게시판 추가</a>
+                        <a class="dropdown-item" th:href="@{/board/add}">게시판 추가</a>
                     </th:block>
                 </div>
             </li>
-
-            <!-- ADMIN 만 보임 -->
-            <span sec:authorize="hasAuthority('ADMIN')">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/admin/boardManagement}">게시판 관리</a>
-                </li>
-            </span>
-
         </ul>
 
         <!-- 인증된 유저만 보임 -->
         <div sec:authorize="isAuthenticated()">
             <!-- Principal name -->
-            username:
-            <span sec:authentication="name"></span>
-            <span sec:authorize="hasAuthority('ADMIN')">(ADMIN)</span>
-            <span sec:authorize="hasAuthority('MEMBER')">(MEMBER)</span>
+            <span style="color:white">username:</span>
+            <span style="color:white" sec:authentication="name"></span>
+
+            <th:block th:switch="${#authorization.expression('hasAuthority(''ADMIN'')')}">
+                <span th:case="true" style="color:white">(ADMIN)</span>
+                <span th:case="false" style="color:white">(MEMBER)</span>
+            </th:block>
+
             <a class="btn btn-success" href="#" th:href="@{/user/info}"> 내 정보 </a>
             <a class="btn btn-success" href="#" th:href="@{/auth/logout}"> Logout </a>
         </div>
@@ -84,8 +80,8 @@
                     result.forEach( function(datum) {
                         let childA = document.createElement('a');
                         childA.classList.add('dropdown-item');
-                        childA.href = contextPath + '/board/' + datum.boardURI;
-                        childA.innerHTML = datum.boardTitle;
+                        childA.href = contextPath + '/board/get/' + datum.boardURI;
+                        childA.innerHTML = datum.title;
                         $('#nav-dropdown-menu').append(childA);
                     });
                 }

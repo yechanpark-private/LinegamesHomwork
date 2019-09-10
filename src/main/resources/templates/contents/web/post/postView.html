@@ -1,3 +1,4 @@
+<!-- 실제 게시글을 보여주는 뷰 -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -17,17 +18,17 @@
         <a href="#" th:href="@{/community/freeBoard/board/add}" class="btn btn-success">글쓰기</a>
 
         <!-- 게시글 출력 -->
-        <th:block th:each="boardContent : ${board.boardContentList}">
+        <th:block th:each="post : ${board.postList}">
             <div class="my-1 p-1 bg-white rounded shadow-sm board">
 
                 <div class="media text-muted pt-3">
                     <div class="media-body pb-3 mb-0 small lh-125 border-gray">
                         <div class="justify-content-between align-items-center w-100">
-                            <strong class="text-gray-dark" th:text="${boardContent.author}">Board Author</strong>
-                            <strong class="text-gray-dark" th:text="'(작성시간 : ' + ${boardContent.addDate} + ')'">boardContent
+                            <strong class="text-gray-dark" th:text="${post.author}">Board Author</strong>
+                            <strong class="text-gray-dark" th:text="'(작성시간 : ' + ${post.addDate} + ')'">post
                                 AddDate</strong>
                             <strong class="text-gray-dark"
-                                    th:text="'(최종수정시간 : ' + ${boardContent.lastModifyDate} + ')'">boardContent
+                                    th:text="'(최종수정시간 : ' + ${post.lastModifyDate} + ')'">post
                                 LastModifyDate</strong>
                         </div>
                     </div>

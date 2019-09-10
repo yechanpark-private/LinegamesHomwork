@@ -21,7 +21,7 @@ public class HomeController {
     private BoardService boardService;
 
     /**
-     * 게시판 진입부, 존재하는 게시판의 목록을 보여주는 뷰를 반환
+     * 메인 홈페이지
      */
     @GetMapping("")
     public String home(Model model) {

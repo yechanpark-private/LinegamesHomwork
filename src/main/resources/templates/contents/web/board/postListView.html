@@ -1,0 +1,53 @@
+<!-- 해당 게시판 홈, 게시판에 포함된 게시글의 리스트를 보여줌 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content" class="my-5 p-5">
+    <h2>
+        <th:block th:text="${board.title}"/>
+    </h2>
+
+    <!-- ADMIN 만 보임 -->
+    <span sec:authorize="hasAuthority('ADMIN')">
+        <a class="nav-link" th:href="@{/admin/board/} + ${board.boardURI}">게시판 관리</a>
+    </span>
+
+    <table class="table">
+        <tr>
+            <td scope="col">번호</td>
+            <td scope="col">제목</td>
+            <td scope="col">등록자</td>
+            <td scope="col">등록일</td>
+        </tr>
+        <tr>
+
+            <th:block th:switch="!${#lists.isEmpty(board.postList)}">
+                <!-- 게시글이 해당 Board에 존재하는 경우 -->
+                <th:block th:case="true">
+                    <th:block th:each="post : ${board.postList}">
+                        <td scope="row" th:text="${post.id}"></td>
+                        <td th:text="*{post.title}"></td>
+                        <td th:text="*{post.author}"></td>
+                        <td th:text="*{post.content}"></td>
+                    </th:block>
+                </th:block>
+
+                <!-- 게시글이 해당 Board에 존재하지 않는 경우 -->
+                <th:block th:case="false">
+                    <td colspan="4">No Data</td>
+                </th:block>
+            </th:block>
+        </tr>
+    </table>
+</div>
+</body>
+
+</html>
