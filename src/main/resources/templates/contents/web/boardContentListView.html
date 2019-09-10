@@ -1,4 +1,4 @@
-<!-- 게시판 리스트 -->
+<!-- 게시판에 대한 실제 게시판 테이블 템플릿 -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -9,24 +9,47 @@
     <title>Title</title>
 </head>
 <body>
-<div layout:fragment="content">
-    <table>
+<div layout:fragment="content" class="my-5 p-5">
+    <h2>
+        <th:block th:text="${board.boardTitle}"/>
+    </h2>
+    <table class="table">
         <tr>
-            <td>번호</td>
-            <td>제목</td>
-            <td>등록자</td>
-            <td>등록일</td>
+            <td scope="col">번호</td>
+            <td scope="col">제목</td>
+            <td scope="col">등록자</td>
+            <td scope="col">등록일</td>
         </tr>
-        <th:block th:each="boardContent : ${board.boardContentList}">
-            <tr>
-                <td th:text="${boardContent.boardContentId}"></td>
-                <td th:text="${boardContent.title}"></td>
-                <td th:text="${boardContent.author}"></td>
-                <td th:text="${boardContent.addDate}"></td>
-            </tr>
-        </th:block>
+        <tr>
+
+            <!-- 게시글이 해당 Board에 존재하는 경우 -->
+            <th:block th:if="!${#lists.isEmpty(board.boardContentList)}">
+                <th:block th:each="boardContent : ${board.boardContentList}">
+                    <td scope="row" th:text="${boardContent.boardContentId}"></td>
+                    <td th:text="*{boardContent.title}"></td>
+                    <td th:text="*{boardContent.author}"></td>
+                    <td th:text="*{boardContent.content}"></td>
+                </th:block>
+            </th:block>
+
+            <!-- 게시글이 해당 Board에 존재하지 않는 경우 -->
+            <th:block th:if="${#lists.isEmpty(board.boardContentList)}">
+                <td colspan="4">No Data</td>
+            </th:block>
+        </tr>
     </table>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('.table').dataTable( {
+            "language": {
+                "emptyTable":"My Custom Message On Empty Table"
+            }
+        });
+    });
+
+</script>
 </body>
 
 </html>

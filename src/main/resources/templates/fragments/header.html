@@ -17,6 +17,9 @@
     <script th:src="@{/webjars/popper.js/1.15.0/umd/popper.min.js}"></script>
     <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
 
+    <!-- Context Path를 구하기 위한 태그 -->
+    <link id="contextPathHolder" th:data-contextPath="${#httpServletRequest.getContextPath()}"/>
+
     <!-- ETC JS / CSS-->
     <!--<script th:src="@{/resources/js/offcanvas.js}"></script>-->
 
@@ -31,8 +34,15 @@
 
     <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" th:href="@{/}">전체 게시판 목록</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">전체 게시판 목록</a>
+                <div id="nav-dropdown-menu" class="dropdown-menu" aria-labelledby="dropdown01">
+                    <!-- ADMIN 만 보임 -->
+                    <th:block sec:authorize="hasAuthority('ADMIN')">
+                        <a class="dropdown-item" href="#">게시판 추가</a>
+                    </th:block>
+                </div>
             </li>
 
             <!-- ADMIN 만 보임 -->
@@ -61,6 +71,28 @@
             <a class="btn btn-success" href="#" th:href="@{/auth/signup}"> Sign Up </a>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+
+            let contextPath = $('#contextPathHolder').attr('data-contextPath');
+
+            $.ajax({
+                url : contextPath + '/board/rest',
+                type: 'get',
+                success: function(result) {
+                    result.forEach( function(datum) {
+                        let childA = document.createElement('a');
+                        childA.classList.add('dropdown-item');
+                        childA.href = contextPath + '/board/' + datum.boardURI;
+                        childA.innerHTML = datum.boardTitle;
+                        $('#nav-dropdown-menu').append(childA);
+                    });
+                }
+            });
+
+        });
+    </script>
 </nav>
 </body>
 </html>

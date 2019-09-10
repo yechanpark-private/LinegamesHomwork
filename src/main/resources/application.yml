@@ -16,6 +16,9 @@ spring:
       max-file-size: 5MB
       max-request-size: 5MB
 
+  thymeleaf:
+    cache: false
+
   h2:
     console:
       enabled: true

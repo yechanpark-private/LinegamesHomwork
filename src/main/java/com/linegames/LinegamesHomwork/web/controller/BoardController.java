@@ -23,16 +23,21 @@ public class BoardController {
 
     /**
      * @param boardURI String 게시판 URI Path
-     * @return viewName String 게시판 리스트 뷰
+     * @return viewName String 게시판 뷰
      */
     @GetMapping("/{boardURI}")
-    public String routeBoard(@PathVariable("boardURI") String boardURI, Model model) throws WebException {
+    public String getBoard(@PathVariable("boardURI") String boardURI, Model model) throws WebException {
         Board board = boardService.findByBoardURI(boardURI);
-
+        System.out.println(board.getBoardURI());
         if (board == null)
             throw new BoardNotExistException("Board Not Exist", "/");
 
-        model.addAttribute("board", board.getBoardContentList());
+        model.addAttribute("board", board);
+        System.out.println(board.getBoardTitle());
+        System.out.println(board.getBoardContentList().get(0).getBoardContentId());
+        System.out.println(board.getBoardContentList().get(0).getTitle());
+        System.out.println(board.getBoardContentList().get(0).getAuthor());
+        System.out.println(board.getBoardContentList().get(0).getContent());
         return "contents/web/boardContentListView";
     }
 }

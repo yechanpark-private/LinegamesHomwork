@@ -18,10 +18,9 @@ public class Board {
     @Column(name = "BOARD_URI")
     private String boardURI;  // 게시판 URI
 
-    private String viewName;  // 보여줄 템플릿 뷰 이름
-
     private String boardTitle; // 게시판 제목 (유저에게 보이는 게시판 제목)
-    private Boolean activated; // 게시판 활성화, 비활성화 여부
+
+    private Boolean activated = true; // 게시판 활성화, 비활성화 여부
     //private List<GrantedAuthority> grantedAuthorityList; // 게시판에 접근할 수 있는 Authority 리스트
 
     /**
