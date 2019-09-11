@@ -40,7 +40,7 @@
                 <div id="nav-dropdown-menu" class="dropdown-menu" aria-labelledby="dropdown01">
                     <!-- ADMIN 만 보임 -->
                     <th:block sec:authorize="hasAuthority('ADMIN')">
-                        <a class="dropdown-item" th:href="@{/board/add}">게시판 추가</a>
+                        <a class="dropdown-item" th:href="@{/board/upsert}">게시판 추가</a>
                     </th:block>
                 </div>
             </li>

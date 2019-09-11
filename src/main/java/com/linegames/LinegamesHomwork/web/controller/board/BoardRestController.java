@@ -29,26 +29,31 @@ public class BoardRestController {
     }
 
     /**
-     * 게시판 추가 API
+     * 게시판 UPSERT API
      */
-    @PostMapping("/add")
+    @PostMapping("/upsert")
     public APIResponse saveBoard(@RequestBody Board board) {
-        Board retrievedBoard = boardService.findByBoardURI(board.getBoardURI());
-
-        if ( retrievedBoard != null )
-            throw new APIException(ErrorCodeEnum.BOARD_ADD_DUPLICATED_FAILED);
-
-        Board newBoard = new Board();
-        newBoard.setBoardURI(board.getBoardURI());
-        newBoard.setTitle(board.getTitle());
-
-        boardService.save(newBoard);
+        Board updateBoard = boardService.findByBoardURI(board.getBoardURI());
 
         APIResponse apiResponse = new APIResponse();
+        apiResponse.add("upsertType", "UPDATE");
+
+        // boardURI가 존재하지 않는 경우 : INSERT
+        if ( updateBoard == null ) {
+            updateBoard = new Board();
+            apiResponse.add("upsertType", "INSERT");
+        }
+
+        updateBoard.setBoardURI(board.getBoardURI());
+        updateBoard.setTitle(board.getTitle());
+
+        boardService.save(updateBoard);
+
         apiResponse
-                .add("title", newBoard.getTitle())
-                .add("boardURI", newBoard.getBoardURI());
+                .add("title", updateBoard.getTitle())
+                .add("boardURI", updateBoard.getBoardURI());
 
         return apiResponse;
+
     }
 }

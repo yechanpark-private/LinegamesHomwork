@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layouts/layout}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
 <head>
     <!-- Site Properties -->
     <title>Bootstrap 4 Register Form</title>
@@ -10,13 +10,15 @@
 
 <div layout:fragment="content">
     <div class="container p-5 my-5">
+
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
-                <h2>Add Board</h2>
+                <h2>Add / Update Board</h2>
                 <hr>
             </div>
         </div>
+
         <div class="row">
             <div class="col-md-3 field-label-responsive">
                 <label for="titleInput">Board Title</label>
@@ -26,11 +28,12 @@
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                         <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
                         <input type="text" class="form-control" id="titleInput"
-                               placeholder="Board Title" required autofocus>
+                               placeholder="Board Title" required autofocus th:value="${board.title}">
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-md-3 field-label-responsive">
                 <label for="boardURIInput">Board URL</label>
@@ -40,22 +43,24 @@
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                         <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
                         /<input type="text" class="form-control" id="boardURIInput"
-                               placeholder="Board URI" required autofocus>
+                                placeholder="Board URI" required autofocus th:value="${board.boardURI}">
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
-                <button id="addBoardButton" class="btn btn-success"><i class="fa fa-user-plus"></i>Save</button>
+                <button id="saveBoardButton" class="btn btn-success"><i class="fa fa-user-plus"></i>Save</button>
             </div>
         </div>
     </div>
+
     <script>
         $(document).ready(function() {
 
-            $('#addBoardButton').click(function(){
+            $('#saveBoardButton').click(function(){
                 let contextPath = $('#contextPathHolder').attr('data-contextPath');
 
                 let boardTitle = $('#titleInput').val();
@@ -67,14 +72,21 @@
                 };
 
                 $.ajax({
-                    url: contextPath + '/board/rest/add',
+                    url: contextPath + '/board/rest/upsert',
                     type: 'post',
                     contentType: 'application/json',
                     data: JSON.stringify(boardData),
                     success: function(result) {
 
                         if ( !result.errorCode ) {
-                            alert(result.data.title + "(" + result.data.boardURI + ") 게시판이 추가되었습니다.");
+                            if ( result.data.upsertType == 'UPDATE') {
+                                alert(result.data.title + "(" + result.data.boardURI + ") 게시판이 갱신되었습니다.");
+                            }
+
+                            else if( result.data.upsertType == 'INSERT' ) {
+                                alert(result.data.title + "(" + result.data.boardURI + ") 게시판이 추가되었습니다.");
+                            }
+
                             location.href = contextPath + '/';
                         }
 
@@ -89,6 +101,7 @@
                 });
             });
         });
+
 
     </script>
 </div>

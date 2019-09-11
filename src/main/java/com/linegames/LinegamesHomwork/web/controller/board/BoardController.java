@@ -1,5 +1,6 @@
 package com.linegames.LinegamesHomwork.web.controller.board;
 
+import com.linegames.LinegamesHomwork.commons.exception.ErrorCodeEnum;
 import com.linegames.LinegamesHomwork.commons.exception.web.WebException;
 import com.linegames.LinegamesHomwork.web.model.Board;
 import com.linegames.LinegamesHomwork.web.service.BoardService;
@@ -36,11 +37,28 @@ public class BoardController {
     }
 
     /**
-     * 게시판 추가 뷰
+     * 게시판 추가, 수정 뷰
      */
-    @GetMapping("/add")
-    public String addBoard() {
-        return "contents/web/board/addView";
+    @GetMapping({"/upsert", "/upsert/{boardURI}"})
+    public String addBoard(Model model, @PathVariable(value = "boardURI", required = false) String boardURI) {
+
+        // boarURI 파라미터가 들어오지 않은 경우 INSERT
+        if ( boardURI == null ) {
+            model.addAttribute("board", new Board());
+            return "contents/web/board/upsertView";
+        }
+
+        Board retrievedBoard = boardService.findByBoardURI(boardURI);
+
+        // boardURI에 해당하는 게시판이 없는 경우 INSERT
+        if ( retrievedBoard == null ) {
+            model.addAttribute("board", new Board());
+            return "contents/web/board/upsertView";
+        }
+
+        // boardURI에 해당하는 게시판이 있는 경우 UPDATE
+        model.addAttribute("board", retrievedBoard);
+        return "contents/web/board/upsertView";
     }
 
 }
