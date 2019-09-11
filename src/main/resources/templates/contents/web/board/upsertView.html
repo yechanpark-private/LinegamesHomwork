@@ -26,7 +26,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-font"></i></div>
                         <input type="text" class="form-control" id="titleInput"
                                placeholder="Board Title" required autofocus th:value="${board.title}">
                     </div>
@@ -41,9 +41,26 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-link"></i></div>
                         /<input type="text" class="form-control" id="boardURIInput"
                                 placeholder="Board URI" required autofocus th:value="${board.boardURI}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 field-label-responsive">
+                <label for="boardActivatedCheckbox">Board Activation</label>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-toggle-on"></i></div>
+                        <label class="switch">
+                            <input id="boardActivatedCheckbox" type="checkbox" th:checked="${board.activated}" th:value="${board.activated}">
+                            <span class="slider round"></span>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -60,15 +77,23 @@
     <script>
         $(document).ready(function() {
 
+            $('#boardActivatedCheckbox').change(function() {
+                let checked = $(this).attr("checked");
+                $(this).attr("checked", !checked );
+                $('#boardActivatedCheckbox').val( !checked );
+            });
+
             $('#saveBoardButton').click(function(){
                 let contextPath = $('#contextPathHolder').attr('data-contextPath');
 
                 let boardTitle = $('#titleInput').val();
                 let boardURI = $('#boardURIInput').val();
+                let boardActivated = $('#boardActivatedCheckbox').val();
 
                 let boardData = {
                     'boardURI' : boardURI,
-                    'title' : boardTitle
+                    'title' : boardTitle,
+                    'activated' : boardActivated
                 };
 
                 $.ajax({
@@ -101,6 +126,7 @@
                 });
             });
         });
+
 
 
     </script>

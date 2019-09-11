@@ -1,7 +1,7 @@
 package com.linegames.LinegamesHomwork.auth.model;
 
 public enum AuthorityEnum {
-    MEMBER("MEMBER"), ADMIN("ADMIN");
+    MEMBER("ROLE_MEMBER"), ADMIN("ROLE_ADMIN");
 
     private String authorityName;
 

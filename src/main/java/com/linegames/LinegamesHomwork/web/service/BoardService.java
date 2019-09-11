@@ -27,4 +27,8 @@ public class BoardService {
     public List<Board> findAll() {
         return boardRepository.findAll();
     }
+
+    public List<Board> findByActivated(boolean activated) {
+        return boardRepository.findByActivated(activated);
+    }
 }

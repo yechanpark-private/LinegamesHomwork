@@ -16,8 +16,8 @@
     </h2>
 
     <!-- ADMIN 만 보임 -->
-    <span sec:authorize="hasAuthority('ADMIN')">
-        <a class="nav-link" th:href="@{/admin/board/} + ${board.boardURI}">게시판 관리</a>
+    <span sec:authorize="hasAuthority('ROLE_ADMIN')">
+        <a class="nav-link" th:href="@{/board/upsert/} + ${board.boardURI}">게시판 관리</a>
     </span>
 
     <table class="table">

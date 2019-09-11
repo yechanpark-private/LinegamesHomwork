@@ -1,13 +1,15 @@
 package com.linegames.LinegamesHomwork.web.controller.board;
 
+import com.linegames.LinegamesHomwork.auth.model.AuthorityEnum;
 import com.linegames.LinegamesHomwork.commons.APIResponse;
-import com.linegames.LinegamesHomwork.commons.exception.ErrorCodeEnum;
-import com.linegames.LinegamesHomwork.commons.exception.api.APIException;
 import com.linegames.LinegamesHomwork.web.model.Board;
 import com.linegames.LinegamesHomwork.web.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -25,7 +27,18 @@ public class BoardRestController {
      */
     @GetMapping("")
     public List<Board> getBoardList() {
-        return boardService.findAll();
+
+        Collection<? extends GrantedAuthority> authorities
+                = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+
+        // ADMIN 권한이 있으면 모두 리턴
+        for (GrantedAuthority authority : authorities) {
+            if (authority.getAuthority().equals(AuthorityEnum.ADMIN.getAuthorityName()))
+                return boardService.findAll();
+        }
+
+        // ADMIN이 아닌 경우 activated만 리턴
+        return boardService.findByActivated(true);
     }
 
     /**
@@ -39,13 +52,14 @@ public class BoardRestController {
         apiResponse.add("upsertType", "UPDATE");
 
         // boardURI가 존재하지 않는 경우 : INSERT
-        if ( updateBoard == null ) {
+        if (updateBoard == null) {
             updateBoard = new Board();
             apiResponse.add("upsertType", "INSERT");
         }
 
         updateBoard.setBoardURI(board.getBoardURI());
         updateBoard.setTitle(board.getTitle());
+        updateBoard.setActivated(board.getActivated());
 
         boardService.save(updateBoard);
 

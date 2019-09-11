@@ -1,6 +1,5 @@
 package com.linegames.LinegamesHomwork.web.controller.board;
 
-import com.linegames.LinegamesHomwork.commons.exception.ErrorCodeEnum;
 import com.linegames.LinegamesHomwork.commons.exception.web.WebException;
 import com.linegames.LinegamesHomwork.web.model.Board;
 import com.linegames.LinegamesHomwork.web.service.BoardService;

@@ -43,7 +43,7 @@
                         <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                             <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-unlock-alt"></i></div>
                             <select th:field="*{authorities}">
-                                <th:block sec:authorize="hasAuthority('ADMIN')">
+                                <th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
                                     <option th:value="'ADMIN'" th:text="ADMIN"></option>
                                 </th:block>
                                 <option th:value="'MEMBER'" th:text="MEMBER"></option>

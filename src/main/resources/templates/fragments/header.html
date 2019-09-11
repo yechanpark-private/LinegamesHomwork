@@ -39,7 +39,7 @@
                    aria-haspopup="true" aria-expanded="false">전체 게시판 목록</a>
                 <div id="nav-dropdown-menu" class="dropdown-menu" aria-labelledby="dropdown01">
                     <!-- ADMIN 만 보임 -->
-                    <th:block sec:authorize="hasAuthority('ADMIN')">
+                    <th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
                         <a class="dropdown-item" th:href="@{/board/upsert}">게시판 추가</a>
                     </th:block>
                 </div>
@@ -52,7 +52,7 @@
             <span style="color:white">username:</span>
             <span style="color:white" sec:authentication="name"></span>
 
-            <th:block th:switch="${#authorization.expression('hasAuthority(''ADMIN'')')}">
+            <th:block th:switch="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">
                 <span th:case="true" style="color:white">(ADMIN)</span>
                 <span th:case="false" style="color:white">(MEMBER)</span>
             </th:block>
