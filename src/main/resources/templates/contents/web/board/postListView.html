@@ -11,42 +11,63 @@
 </head>
 <body>
 <div layout:fragment="content" class="my-5 p-5">
-    <h2>
-        <th:block th:text="${board.title}"/>
-    </h2>
+    <div class="navbar">
+        <h2>
+            <th:block th:text="${board.title}"/>
+        </h2>
 
-    <!-- ADMIN 만 보임 -->
-    <span sec:authorize="hasAuthority('ROLE_ADMIN')">
-        <a class="nav-link" th:href="@{/board/upsert/} + ${board.boardURI}">게시판 관리</a>
-    </span>
+        <!-- ADMIN 만 보임 -->
+        <th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
+            <a class="btn btn-warning" th:href="@{/board/upsert/} + ${board.boardURI}">게시판 관리</a>
+        </th:block>
+    </div>
 
-    <table class="table">
-        <tr>
-            <td scope="col">번호</td>
-            <td scope="col">제목</td>
-            <td scope="col">등록자</td>
-            <td scope="col">등록일</td>
-        </tr>
-        <tr>
+    <div>
+        <!-- 인증된 유저만 보임 -->
+        <th:block sec:authorize="isAuthenticated()">
+            <a class="btn btn-success pull-right" th:href="@{/post/add/} + ${board.boardURI}">게시글 등록</a>
+        </th:block>
+    </div>
 
+    <table id="postTable" class="table table-hover">
+        <thead>
+            <tr>
+                <td scope="col">번호</td>
+                <td scope="col">제목</td>
+                <td scope="col">등록자</td>
+                <td scope="col">등록일</td>
+            </tr>
+        </thead>
+        <tbody>
             <th:block th:switch="!${#lists.isEmpty(board.postList)}">
                 <!-- 게시글이 해당 Board에 존재하는 경우 -->
                 <th:block th:case="true">
                     <th:block th:each="post : ${board.postList}">
-                        <td scope="row" th:text="${post.id}"></td>
-                        <td th:text="*{post.title}"></td>
-                        <td th:text="*{post.author}"></td>
-                        <td th:text="*{post.content}"></td>
+                        <tr class="table-row" th:onclick="|redirectToPost(${post.id})|">
+                            <td scope="row" th:text="${post.id}"></td>
+                            <td th:text="*{post.title}"></td>
+                            <td th:text="*{post.author}"></td>
+                            <td th:text="*{post.content}"></td>
+                        </tr>
                     </th:block>
                 </th:block>
 
                 <!-- 게시글이 해당 Board에 존재하지 않는 경우 -->
                 <th:block th:case="false">
-                    <td colspan="4">No Data</td>
+                    <tr>
+                        <td colspan="4">No Data</td>
+                    </tr>
                 </th:block>
             </th:block>
-        </tr>
+        </tbody>
     </table>
+
+    <script>
+        function redirectToPost(postId) {
+            let contextPath = $('#contextPathHolder').attr('data-contextPath');
+            location.href = contextPath + '/post/' + postId;
+        }
+    </script>
 </div>
 </body>
 

@@ -3,6 +3,7 @@ package com.linegames.LinegamesHomwork;
 import com.linegames.LinegamesHomwork.auth.model.AuthorityEnum;
 import com.linegames.LinegamesHomwork.auth.model.CustomUserDetails;
 import com.linegames.LinegamesHomwork.auth.service.CustomUserDetailsService;
+import com.linegames.LinegamesHomwork.commons.util.CustomLocalDateTimeFormatter;
 import com.linegames.LinegamesHomwork.web.model.Board;
 import com.linegames.LinegamesHomwork.web.model.Post;
 import com.linegames.LinegamesHomwork.web.service.BoardService;
@@ -12,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,13 +60,20 @@ public class DataInitialClass {
         board.setTitle("기본게시판");
         board.setBoardURI("default");
 
-        Post post1 = new Post();
-        post1.setAuthor("author1");
-        post1.setTitle("title");
-        post1.setContent("content");
-        post1.setBoard(board);
+        Post post = new Post();
+        post.setAuthor("Default Post Author");
+        post.setTitle("Default Post Title");
+        post.setContent("Default Post Content");
+        post.setAddDate(
+                CustomLocalDateTimeFormatter.getFormattedLocalDateTime(LocalDateTime.now())
+        );
+        post.setLastModifyDate(
+                CustomLocalDateTimeFormatter.getFormattedLocalDateTime(LocalDateTime.now())
+        );
+        post.setBoard(board);
 
-        board.getPostList().add(post1);
+        // board만 저장해도 post도 같이 저장할 경우, post를 Board.postList에 추가하고, CascadeType.PERSIST 옵션을 줘야 함
+        board.getPostList().add(post);
 
         boardService.save(board);
 

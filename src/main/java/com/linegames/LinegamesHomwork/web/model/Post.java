@@ -2,6 +2,7 @@ package com.linegames.LinegamesHomwork.web.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.linegames.LinegamesHomwork.commons.util.CustomLocalDateTimeFormatter;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -52,4 +53,22 @@ public class Post {
     @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JsonManagedReference
     private List<Post> children = new ArrayList<>();
+
+    public Post setLastModifyDate(LocalDateTime localDateTime) {
+        this.lastModifyDate = CustomLocalDateTimeFormatter.getFormattedLocalDateTime(localDateTime);
+        return this;
+    }
+
+    public Post setAddDate(LocalDateTime localDateTime) {
+        this.addDate = CustomLocalDateTimeFormatter.getFormattedLocalDateTime(localDateTime);
+        return this;
+    }
+
+    public String getLastModifyDate() {
+        return CustomLocalDateTimeFormatter.getFormattedString(this.lastModifyDate);
+    }
+
+    public String getAddDate() {
+        return CustomLocalDateTimeFormatter.getFormattedString(this.addDate);
+    }
 }

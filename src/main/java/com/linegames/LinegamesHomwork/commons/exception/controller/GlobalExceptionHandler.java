@@ -26,6 +26,6 @@ public class GlobalExceptionHandler {
     // WEB Exception Handling
     @ExceptionHandler(WebException.class)
     public String handleWebException(WebException ex) {
-        return "redirect:/" + ex.getRedirectURL();
+        return "redirect:" + ex.getRedirectURL();
     }
 }

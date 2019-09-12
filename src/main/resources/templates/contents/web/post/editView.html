@@ -1,0 +1,67 @@
+<!-- 게시글 작성 뷰 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <!-- Site Properties -->
+    <title>Bootstrap 4 Register Form</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="container p-5 my-5">
+
+        <form method="post" th:action="@{/post/add/} + ${board.boardURI}" th:object="${post}">
+            <input type="hidden" th:field="*{id}" th:value="*{id}"/>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <h2>Add / Update Post</h2>
+                    <hr>
+                </div>
+            </div>
+
+            <!-- 글 제목 입력 창 -->
+            <div class="row">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="titleInput">Post Title</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-font"></i></div>
+                            <input type="text" class="form-control" id="titleInput"
+                                   placeholder="글 제목" required autofocus th:value="*{title}" th:field="*{title}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 글 내용 입력 창 -->
+            <div class="row">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="postContentTextArea">Post Content</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-link"></i></div>
+                            <textarea class="form-control" id="postContentTextArea" rows="7"
+                                      th:value="*{content}" th:field="*{content}" placeholder="글 내용"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <button type="submit" id="saveBoardButton" class="btn btn-success"><i class="fa fa-user-plus"></i>Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
