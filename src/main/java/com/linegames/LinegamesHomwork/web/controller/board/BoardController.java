@@ -21,10 +21,11 @@ public class BoardController {
     private BoardService boardService;
 
     /**
+     * boarURI에 해당하는 Board에 대한 게시글 리스트로 이동
      * @param boardURI String 게시판 URI Path
-     * @return viewName String 게시판 뷰
+     * @return 게시판에 존재하는 게시글 리스트 뷰 네임
      */
-    @GetMapping("/get/{boardURI}")
+    @GetMapping("/{boardURI}")
     public String getBoard(@PathVariable("boardURI") String boardURI, Model model) throws WebException {
         Board board = boardService.findByBoardURI(boardURI);
 
@@ -36,27 +37,27 @@ public class BoardController {
     }
 
     /**
-     * 게시판 추가, 수정 뷰
+     * 새로운 Board를 추가하는 upserView 뷰로 이동
+     * @param model {@link Model}
+     * @return 게시판 추가/수정 뷰 네임
      */
-    @GetMapping({"/upsert", "/upsert/{boardURI}"})
-    public String addBoard(Model model, @PathVariable(value = "boardURI", required = false) String boardURI) {
+    @GetMapping("/add")
+    public String addBoard(Model model) {
+        Board board = new Board();
+        model.addAttribute("board", board);
+        return "contents/web/board/upsertView";
+    }
 
-        // boarURI 파라미터가 들어오지 않은 경우 INSERT
-        if ( boardURI == null ) {
-            model.addAttribute("board", new Board());
-            return "contents/web/board/upsertView";
-        }
-
-        Board retrievedBoard = boardService.findByBoardURI(boardURI);
-
-        // boardURI에 해당하는 게시판이 없는 경우 INSERT
-        if ( retrievedBoard == null ) {
-            model.addAttribute("board", new Board());
-            return "contents/web/board/upsertView";
-        }
-
-        // boardURI에 해당하는 게시판이 있는 경우 UPDATE
-        model.addAttribute("board", retrievedBoard);
+    /**
+     * boardURI에 해당하는 Board를 수정하는 upsertView로 뷰로 이동
+     * @param boardURI 수정할 게시판에 대한 URI Path
+     * @param model {@link Model}
+     * @return 게시판 추가/수정 뷰 네임
+     */
+    @GetMapping("/update/{boardURI}")
+    public String editBoard(Model model, @PathVariable(value = "boardURI") String boardURI) {
+        Board board = boardService.findByBoardURI(boardURI);
+        model.addAttribute("board", board);
         return "contents/web/board/upsertView";
     }
 

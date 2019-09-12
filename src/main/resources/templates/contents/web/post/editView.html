@@ -12,7 +12,7 @@
 <div layout:fragment="content">
     <div class="container p-5 my-5">
 
-        <form method="post" th:action="@{/post/add/} + ${board.boardURI}" th:object="${post}">
+        <form method="post" th:action="@{/post} + ${post.board != null ? '/add/parent/' + post.board.boardURI : '/add/child/' + post.parent.id}" th:object="${post}">
             <input type="hidden" th:field="*{id}" th:value="*{id}"/>
             <div class="row">
                 <div class="col-md-3"></div>

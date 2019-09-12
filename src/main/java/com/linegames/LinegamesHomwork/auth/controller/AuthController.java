@@ -18,6 +18,9 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 인증 관련 웹 컨트롤러
+ */
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
@@ -29,7 +32,9 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     /**
-     * 로그인 뷰
+     * 로그인 뷰로 이동
+     *
+     * @return 로그인 페이지인 loginView 뷰 네임
      */
     @GetMapping("/login")
     public String login() {
@@ -37,7 +42,10 @@ public class AuthController {
     }
 
     /**
-     * 회원가입 뷰
+     * 회원가입 뷰로 이동
+     *
+     * @param model {@link Model}
+     * @return 회원가입 페이지인 signupView 뷰 네임
      */
     @GetMapping("/signup")
     public String signUpGet(Model model) {
@@ -46,7 +54,11 @@ public class AuthController {
     }
 
     /**
-     * 회원가입 로직
+     * 회원가입 수행 로직
+     *
+     * @param customUserDetails 회원가입할 유저의 정보를 담은 {@link CustomUserDetails} 객체
+     * @param bindingResult     회원가입 Validation 결과를 담은 {@link BindingResult} 객체
+     * @return 로그인 페이지 URL 리다이렉션
      */
     @PostMapping("/signup")
     public String signUpPost(@ModelAttribute @Valid CustomUserDetails customUserDetails, BindingResult bindingResult) {

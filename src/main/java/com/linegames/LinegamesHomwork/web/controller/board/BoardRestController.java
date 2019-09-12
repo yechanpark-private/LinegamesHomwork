@@ -23,7 +23,11 @@ public class BoardRestController {
     private BoardService boardService;
 
     /**
-     * 게시판 리스트 조회 API
+     * Board 리스트 전체 정보를 리턴하는 API. Board.activated 값이 false인 것은 ADMIN에게만 리턴.
+     * MEMBER / ANONYMOUS : activated 값이 true인 게시판만 리턴
+     * ADMIN : activated 값에 상관없이 모든 게시판 리턴
+     *
+     * @return 특정 권한을 가진 유저가 조회할 수 있는 Board 정보 리스트
      */
     @GetMapping("")
     public List<Board> getBoardList() {
@@ -42,12 +46,13 @@ public class BoardRestController {
     }
 
     /**
-     * 게시판 UPSERT API
+     * 게시판 INSERT API - 뷰를 1개로 쓰기 때문에 편의 상 1개의 API를 사용
      */
     @PostMapping("/upsert")
     public APIResponse saveBoard(@RequestBody Board board) {
         Board updateBoard = boardService.findByBoardURI(board.getBoardURI());
 
+        // 기본적으로 UPDATE 모드
         APIResponse apiResponse = new APIResponse();
         apiResponse.add("upsertType", "UPDATE");
 
@@ -57,6 +62,7 @@ public class BoardRestController {
             apiResponse.add("upsertType", "INSERT");
         }
 
+        // UPSERT 공통 로직
         updateBoard.setBoardURI(board.getBoardURI());
         updateBoard.setTitle(board.getTitle());
         updateBoard.setActivated(board.getActivated());

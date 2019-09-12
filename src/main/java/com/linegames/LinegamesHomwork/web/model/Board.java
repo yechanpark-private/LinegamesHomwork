@@ -28,7 +28,7 @@ public class Board {
 
     private String title; // 게시판 제목 (유저에게 보이는 게시판 제목)
 
-    private Boolean activated = true; // 게시판 활성화, 비활성화 여부
+    private Boolean activated = true; // 게시판 활성화(전체 조회 가능), 비활성화 여부(ADMIN만 조회 가능)
     //private List<GrantedAuthority> grantedAuthorityList; // 게시판에 접근할 수 있는 Authority 리스트
 
     /**

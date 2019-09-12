@@ -5,6 +5,9 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
+/**
+ * Web Exception 최상위 클래스
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class WebException extends Exception implements Serializable {

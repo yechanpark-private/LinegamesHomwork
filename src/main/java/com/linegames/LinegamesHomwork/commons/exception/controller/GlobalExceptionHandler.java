@@ -13,7 +13,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // API Exception Handling
+    /**
+     * API Exception Handling
+     *
+     * @param ex 발생한 {@link APIException} 객체
+     * @return 클라이언트에게 Serialize하여 리턴할 {@link APIExceptionResponse} 객체
+     */
     @ExceptionHandler(APIException.class)
     @ResponseBody
     public APIExceptionResponse handleAPIException(APIException ex) {
@@ -23,7 +28,12 @@ public class GlobalExceptionHandler {
         return exceptionResponse;
     }
 
-    // WEB Exception Handling
+    /**
+     * WEB Exception Handling
+     *
+     * @param ex 발생한 {@link WebException} 객체
+     * @return 리다이렉트 URL
+     */
     @ExceptionHandler(WebException.class)
     public String handleWebException(WebException ex) {
         return "redirect:" + ex.getRedirectURL();

@@ -29,9 +29,10 @@
                 <!-- Date/Time -->
                 <p>Posted on <th:block th:text="${post.addDate}"></th:block></p>
                 <!-- MEMBER : 자신이 쓴 글인 경우 가능 / ADMIN : 전부 가능 -->
-                <th:block>
-                    <a th:href="@{/post/edit/} + ${post.id}" class="btn btn-warning">글 수정</a>
-                    <a th:data-boardURI="${board.boardURI}" th:onclick="|deletePost(${post.id}, this.getAttribute('data-boardURI'))|" class="btn btn-danger">글 삭제</a>
+                <th:block sec:authorize="isAuthenticated()">
+                    <a th:href="@{/post/add/child/} + ${post.id}" class="btn btn-warning">답글 달기</a>
+                    <a th:href="@{/post/update/} + ${post.id}" class="btn btn-warning">게시글 수정</a>
+                    <a th:onclick="|deletePost(${post.id})|" class="btn btn-danger">게시글 삭제</a>
                 </th:block>
                 <hr>
 
@@ -92,7 +93,7 @@
     </main>
 
     <script>
-        function deletePost(postId, boardURI) {
+        function deletePost(postId) {
 
             let deleteConfirm = confirm("게시글을 삭제하시겠습니까?");
 
@@ -101,13 +102,13 @@
                let contextPath = $('#contextPathHolder').attr('data-contextPath');
 
                 $.ajax({
-                    url: contextPath + '/post/rest/delete/' + postId,
+                    url: contextPath + '/post/rest/' + postId,
                     type: 'delete',
                     success: function(result) {
 
                         if( !result.errorCode ){
                             alert('게시글이 삭제되었습니다.');
-                            location.href = contextPath + '/board/get/' + boardURI;
+                            location.href = contextPath + '/board/' + result.data.boardURI;
                         }
 
                         else {

@@ -25,8 +25,8 @@ public class CustomUserDetails implements UserDetails, Serializable {
 
     @Column(unique = true)
     @NonNull
-    private String username; // 닉네임
-    private String password; // 패스워드
+    private String username; // 닉네임 (로그인에 사용)
+    private String password; // 패스워드 (로그인에 사용, 암호화된 값이 저장되어야 함)
 
     private boolean accountNonExpired;
     private boolean accountNonLocked;

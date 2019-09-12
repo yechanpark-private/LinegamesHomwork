@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,12 +53,17 @@ public class DataInitialClass {
         ((CustomUserDetailsService) userDetailsService).save(adminUserDetails);
     }
 
+    /**
+     * 게시판, 게시글 추가
+     */
     @PostConstruct
     public void addDefaultBoard() {
+        // 게시판 추가
         Board board = new Board();
         board.setTitle("기본게시판");
         board.setBoardURI("default");
 
+        // 부모 Post 추가
         Post post = new Post();
         post.setAuthor("Default Post Author");
         post.setTitle("Default Post Title");
@@ -70,13 +74,52 @@ public class DataInitialClass {
         post.setLastModifyDate(
                 CustomLocalDateTimeFormatter.getFormattedLocalDateTime(LocalDateTime.now())
         );
+        board.getPostList().add(post);
         post.setBoard(board);
 
-        // board만 저장해도 post도 같이 저장할 경우, post를 Board.postList에 추가하고, CascadeType.PERSIST 옵션을 줘야 함
-        board.getPostList().add(post);
+        // 자식 Post1 추가
+        Post child1 = new Post();
+        child1.setAuthor("Default Child1 Post Author");
+        child1.setTitle("Default Child1 Post Title");
+        child1.setContent("Default Child1 Post Content");
+        child1.setAddDate(
+                CustomLocalDateTimeFormatter.getFormattedLocalDateTime(LocalDateTime.now())
+        );
+        child1.setLastModifyDate(
+                CustomLocalDateTimeFormatter.getFormattedLocalDateTime(LocalDateTime.now())
+        );
+        post.getChildren().add(child1);
+        child1.setParent(post);
+
+        // 자식 Post2 추가
+        Post child2 = new Post();
+        child2.setAuthor("Default Child2 Post Author");
+        child2.setTitle("Default Child2 Post Title");
+        child2.setContent("Default Child2 Post Content");
+        child2.setAddDate(
+                CustomLocalDateTimeFormatter.getFormattedLocalDateTime(LocalDateTime.now())
+        );
+        child2.setLastModifyDate(
+                CustomLocalDateTimeFormatter.getFormattedLocalDateTime(LocalDateTime.now())
+        );
+        post.getChildren().add(child2);
+        child2.setParent(post);
+
+        // 자식 Post3 추가
+        Post child3 = new Post();
+        child3.setAuthor("Default Child3 Post Author");
+        child3.setTitle("Default Child3 Post Title");
+        child3.setContent("Default Child3 Post Content");
+        child3.setAddDate(
+                CustomLocalDateTimeFormatter.getFormattedLocalDateTime(LocalDateTime.now())
+        );
+        child3.setLastModifyDate(
+                CustomLocalDateTimeFormatter.getFormattedLocalDateTime(LocalDateTime.now())
+        );
+        child1.getChildren().add(child3);
+        child3.setParent(child1);
 
         boardService.save(board);
-
     }
 
 }

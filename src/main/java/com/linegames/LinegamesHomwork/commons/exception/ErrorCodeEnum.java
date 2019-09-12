@@ -2,6 +2,9 @@ package com.linegames.LinegamesHomwork.commons.exception;
 
 import lombok.Getter;
 
+/**
+ * 관리되는 오류에 대한 Enum
+ */
 @Getter
 public enum ErrorCodeEnum {
     USER_NOT_EXIST(5001, "User Not Exist"),                                 // 유저가 존재하지 않음

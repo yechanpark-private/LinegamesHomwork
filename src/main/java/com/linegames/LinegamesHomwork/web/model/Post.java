@@ -46,11 +46,12 @@ public class Post {
 
     // 부모 게시글
     @ManyToOne
+    @JoinColumn(name = "PARENT_POST_ID")
     @JsonBackReference
     private Post parent;
 
     // 자식 게시글 리스트
-    @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
     @JsonManagedReference
     private List<Post> children = new ArrayList<>();
 

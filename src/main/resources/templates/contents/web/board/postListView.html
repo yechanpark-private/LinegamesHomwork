@@ -18,47 +18,76 @@
 
         <!-- ADMIN 만 보임 -->
         <th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
-            <a class="btn btn-warning" th:href="@{/board/upsert/} + ${board.boardURI}">게시판 관리</a>
+            <a class="btn btn-warning" th:href="@{/board/update/} + ${board.boardURI}">게시판 관리</a>
         </th:block>
     </div>
 
     <div>
         <!-- 인증된 유저만 보임 -->
         <th:block sec:authorize="isAuthenticated()">
-            <a class="btn btn-success pull-right" th:href="@{/post/add/} + ${board.boardURI}">게시글 등록</a>
+            <a class="btn btn-success pull-right" th:href="@{/post/add/parent/} + ${board.boardURI}">게시글 등록</a>
         </th:block>
     </div>
 
     <table id="postTable" class="table table-hover">
         <thead>
-            <tr>
-                <td scope="col">번호</td>
-                <td scope="col">제목</td>
-                <td scope="col">등록자</td>
-                <td scope="col">등록일</td>
-            </tr>
+        <tr>
+            <td scope="col">번호</td>
+            <td scope="col">제목</td>
+            <td scope="col">등록자</td>
+            <td scope="col">등록일</td>
+        </tr>
         </thead>
         <tbody>
-            <th:block th:switch="!${#lists.isEmpty(board.postList)}">
-                <!-- 게시글이 해당 Board에 존재하는 경우 -->
-                <th:block th:case="true">
-                    <th:block th:each="post : ${board.postList}">
-                        <tr class="table-row" th:onclick="|redirectToPost(${post.id})|">
-                            <td scope="row" th:text="${post.id}"></td>
-                            <td th:text="*{post.title}"></td>
-                            <td th:text="*{post.author}"></td>
-                            <td th:text="*{post.content}"></td>
-                        </tr>
+        <th:block th:switch="!${#lists.isEmpty(board.postList)}">
+            <!-- 게시글이 해당 Board에 존재하는 경우 -->
+            <th:block th:case="true">
+                <th:block th:each="post : ${board.postList}">
+                    <tr class="table-row" th:onclick="|redirectToPost(${post.id})|">
+                        <td scope="row" th:text="${post.id}"></td>
+                        <td th:text="*{post.title}"></td>
+                        <td th:text="*{post.author}"></td>
+                        <td th:text="*{post.addDate}"></td>
+                    </tr>
+
+                    <!-- 답글(자식Post) 리스트 출력 -->
+                    <th:block th:with="children = ${post.children}, postDepth = 0">
+                        <!-- 자식Post 리스트 -->
+                        <div th:fragment="childPostBoard">
+                            <!-- 존재하는 자식 Post들에 대해 루프를 돌면서 출력 -->
+                            <th:block th:each="post : ${children}">
+                                <!-- 답글 내용 -->
+                                <tr class="table-row" th:onclick="|redirectToPost(${post.id})|">
+                                    <td scope="row" th:text="${post.id}"></td>
+                                    <td>
+                                        <th:block th:each="postDepth, iterator : ${#numbers.sequence(0, postDepth)}">
+                                            &nbsp;
+                                        </th:block>
+                                        RE:
+                                        <th:block th:text="*{post.title}">
+
+                                        </th:block>
+                                    </td>
+                                    <td th:text="*{post.author}"></td>
+                                    <td th:text="*{post.addDate}"></td>
+                                </tr>
+
+                                <!-- 자식Post를 thymeleaf 의 기능을 사용해 Recursive하게 출력 -->
+                                <div th:with="children = ${post.children}, postDepth = ${postDepth} + 1"
+                                     th:include="contents/web/board/postListView :: childPostBoard"></div>
+                            </th:block>
+                        </div>
                     </th:block>
                 </th:block>
-
-                <!-- 게시글이 해당 Board에 존재하지 않는 경우 -->
-                <th:block th:case="false">
-                    <tr>
-                        <td colspan="4">No Data</td>
-                    </tr>
-                </th:block>
             </th:block>
+
+            <!-- 게시글이 해당 Board에 존재하지 않는 경우 -->
+            <th:block th:case="false">
+                <tr>
+                    <td colspan="4">No Data</td>
+                </tr>
+            </th:block>
+        </th:block>
         </tbody>
     </table>
 
@@ -67,6 +96,7 @@
             let contextPath = $('#contextPathHolder').attr('data-contextPath');
             location.href = contextPath + '/post/' + postId;
         }
+
     </script>
 </div>
 </body>
