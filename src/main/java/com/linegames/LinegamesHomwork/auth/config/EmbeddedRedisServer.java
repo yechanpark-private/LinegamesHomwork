@@ -9,7 +9,7 @@ import javax.annotation.PreDestroy;
 /**
  * 내부용 REDIS 서버
  */
-@Configuration
+@Configuration // 외부용 REDIS  서버를 사용하는 경우 주석처리
 public class EmbeddedRedisServer {
     private RedisServer redisServer;
 
