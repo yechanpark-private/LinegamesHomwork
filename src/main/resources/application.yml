@@ -31,9 +31,9 @@ spring:
       ddl-auto: 'create'
 
 # REDIS를 Session 저장용으로 사용하는 경우 사용,
-#  session:
-#    store-type: redis
+  session:
+    store-type: redis
 
-#  redis: # 해당 서버에 redis데몬이 6379포트로 떠있어야 함
-#    host: 127.0.0.1
-#    port: 6379
+  redis: # 해당 서버에 redis데몬이 6379포트로 떠있어야 함
+    host: 127.0.0.1
+    port: 6379

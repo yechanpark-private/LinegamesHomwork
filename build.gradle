@@ -31,7 +31,7 @@ dependencies {
 	compile group: 'org.springframework.session', name: 'spring-session-data-redis'
 
 	// https://mvnrepository.com/artifact/it.ozimov/embedded-redis
-	//testCompile group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
+	compile group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
 
 	/** Spring Security **/
 	implementation 'org.springframework.boot:spring-boot-starter-security'
