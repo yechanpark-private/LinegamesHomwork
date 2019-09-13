@@ -150,9 +150,9 @@ public class PostController {
         newParentPost.setContent(parentPost.getContent());
         newParentPost.setLastModifyDate(LocalDateTime.now());
 
-        postService.save(newParentPost);
+        newParentPost = postService.save(newParentPost);
 
-        return "redirect:/board/" + boardURI;
+        return "redirect:/post/" + newParentPost.getId();
     }
 
     /**

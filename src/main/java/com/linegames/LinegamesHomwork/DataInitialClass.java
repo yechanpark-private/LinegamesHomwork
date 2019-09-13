@@ -5,6 +5,7 @@ import com.linegames.LinegamesHomwork.auth.model.CustomUserDetails;
 import com.linegames.LinegamesHomwork.auth.service.CustomUserDetailsService;
 import com.linegames.LinegamesHomwork.commons.util.CustomLocalDateTimeFormatter;
 import com.linegames.LinegamesHomwork.web.model.Board;
+import com.linegames.LinegamesHomwork.web.model.Comment;
 import com.linegames.LinegamesHomwork.web.model.Post;
 import com.linegames.LinegamesHomwork.web.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,20 @@ public class DataInitialClass {
         );
         board.getPostList().add(post);
         post.setBoard(board);
+
+        // 부모 Post에 댓글1 추가
+        Comment comment1 = new Comment();
+        comment1.setAuthor("Default Comment1 Author");
+        comment1.setContent("Default Comment1 Content");
+        comment1.setPost(post);
+        post.getComments().add(comment1);
+
+        // 부모 Post에 댓글2 추가
+        Comment comment2 = new Comment();
+        comment2.setAuthor("Default Comment2 Author");
+        comment2.setContent("Default Comment2 Content");
+        comment2.setPost(post);
+        post.getComments().add(comment2);
 
         // 자식 Post1 추가
         Post child1 = new Post();

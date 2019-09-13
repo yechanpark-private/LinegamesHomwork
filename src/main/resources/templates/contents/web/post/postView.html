@@ -27,10 +27,15 @@
                 <hr>
 
                 <!-- Date/Time -->
-                <p>Posted on <th:block th:text="${post.addDate}"></th:block></p>
-                <!-- MEMBER : 자신이 쓴 글인 경우 가능 / ADMIN : 전부 가능 -->
+                <p>Posted on
+                    <th:block th:text="${post.addDate}"></th:block>
+                </p>
+
+                <!-- 로그인한 사람만 수행 가능-->
                 <th:block sec:authorize="isAuthenticated()">
                     <a th:href="@{/post/add/child/} + ${post.id}" class="btn btn-warning">답글 달기</a>
+                    <!-- MEMBER : 자신이 쓴 글인 경우 가능 / ADMIN : 전부 가능 -->
+                    <!-- TODO : 수정 -->
                     <a th:href="@{/post/update/} + ${post.id}" class="btn btn-warning">게시글 수정</a>
                     <a th:onclick="|deletePost(${post.id})|" class="btn btn-danger">게시글 삭제</a>
                 </th:block>
@@ -47,41 +52,27 @@
                 <hr>
 
                 <!-- Comments Form -->
-                <div class="card my-4">
-                    <h5 class="card-header">Leave a Comment:</h5>
-                    <div class="card-body">
-                        <form>
-                            <div class="form-group">
-                                <textarea class="form-control" rows="3"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- 댓글 -->
-                <th:block>
-                    <div class="media mb-4">
-                        <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-                        <div class="media-body">
-                            <h5 class="mt-0">Commenter Name</h5>
-                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin.
-                            Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc
-                            ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-
-                            <!-- 대댓글 -->
-                            <th:block>
-                                <div class="media mt-4">
-                                    <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-                                    <div class="media-body">
-                                        <h5 class="mt-0">Commenter Name</h5>
-                                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante
-                                        sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
-                                        Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in
-                                        faucibus.
-                                    </div>
+                <th:block sec:authorize="isAuthenticated()">
+                    <div class="card my-4">
+                        <h5 class="card-header">Leave a Comment:</h5>
+                        <div class="card-body">
+                            <form method="post" th:action="@{/comment/} + ${post.id}">
+                                <div class="form-group">
+                                    <textarea name="content" class="form-control" rows="3"></textarea>
                                 </div>
-                            </th:block>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </th:block>
+
+                <!-- 댓글 리스트 출력 -->
+                <th:block th:each="comment : ${post.comments}">
+                    <div class="media mb-4">
+                        <!--<img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">-->
+                        <div class="media-body">
+                            <h5 class="mt-0" th:text="${comment.author}">Commenter Name</h5>
+                            <th:block th:text="${comment.content}"></th:block>
                         </div>
                     </div>
                 </th:block>
@@ -121,6 +112,9 @@
                 });
             }
         }
+
+
+
     </script>
 
 </div>

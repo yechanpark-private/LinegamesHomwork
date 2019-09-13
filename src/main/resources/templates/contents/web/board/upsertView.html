@@ -9,6 +9,7 @@
 <body>
 
 <div layout:fragment="content">
+    <input id="boardId" type="hidden" th:value="${board.id}">
     <div class="container p-5 my-5">
 
         <div class="row">
@@ -86,11 +87,13 @@
             $('#saveBoardButton').click(function(){
                 let contextPath = $('#contextPathHolder').attr('data-contextPath');
 
+                let boardId = $('#boardId').val();
                 let boardTitle = $('#titleInput').val();
                 let boardURI = $('#boardURIInput').val();
                 let boardActivated = $('#boardActivatedCheckbox').val();
 
                 let boardData = {
+                    'id' : boardId,
                     'boardURI' : boardURI,
                     'title' : boardTitle,
                     'activated' : boardActivated

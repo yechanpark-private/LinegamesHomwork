@@ -54,4 +54,14 @@ public class BoardService {
     public List<Board> findByActivated(boolean activated) {
         return boardRepository.findByActivated(activated);
     }
+
+    /**
+     * id값에 매치되는 {@link Board} 객체를 반환
+     *
+     * @param id 반환할 {@link Board} 객체의 id값
+     * @return id값에 매치되는 {@link Board} 객체
+     */
+    public Board findById(Long id) {
+        return boardRepository.findById(id).orElse(null);
+    }
 }

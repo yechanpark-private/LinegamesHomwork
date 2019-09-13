@@ -50,16 +50,28 @@ public class BoardRestController {
      */
     @PostMapping("/upsert")
     public APIResponse saveBoard(@RequestBody Board board) {
-        Board updateBoard = boardService.findByBoardURI(board.getBoardURI());
 
         // 기본적으로 UPDATE 모드
         APIResponse apiResponse = new APIResponse();
         apiResponse.add("upsertType", "UPDATE");
 
-        // boardURI가 존재하지 않는 경우 : INSERT
-        if (updateBoard == null) {
+        Board updateBoard;
+
+        // id값이 없으면 INSERT
+        if (board.getId() == null) {
             updateBoard = new Board();
             apiResponse.add("upsertType", "INSERT");
+        }
+
+        // id값이 있는 경우
+        else {
+            updateBoard = boardService.findById(board.getId());
+
+            // boardURI가 존재하지 않는 경우 : INSERT
+            if (updateBoard == null) {
+                updateBoard = new Board();
+                apiResponse.add("upsertType", "INSERT");
+            }
         }
 
         // UPSERT 공통 로직

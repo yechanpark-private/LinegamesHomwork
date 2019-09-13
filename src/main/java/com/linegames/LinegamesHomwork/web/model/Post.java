@@ -55,6 +55,11 @@ public class Post {
     @JsonManagedReference
     private List<Post> children = new ArrayList<>();
 
+    // 댓글 리스트
+    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
+    @JsonManagedReference
+    private List<Comment> comments = new ArrayList<>();
+
     public Post setLastModifyDate(LocalDateTime localDateTime) {
         this.lastModifyDate = CustomLocalDateTimeFormatter.getFormattedLocalDateTime(localDateTime);
         return this;
