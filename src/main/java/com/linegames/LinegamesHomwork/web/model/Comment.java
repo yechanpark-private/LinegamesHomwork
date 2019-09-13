@@ -29,6 +29,6 @@ public class Comment {
     // 게시글
     @ManyToOne
     @JoinColumn(name = "POST_ID")
-    @JsonBackReference
+    @JsonBackReference(value = "post_comment")
     private Post post;
 }

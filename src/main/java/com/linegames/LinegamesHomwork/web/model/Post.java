@@ -44,23 +44,23 @@ public class Post {
      */
     @ManyToOne
     @JoinColumn(name = "BOARD_ID")
-    @JsonBackReference
+    @JsonBackReference(value = "board")
     private Board board; // 이 게시물을 포함하는 게시판
 
     // 부모 게시글
     @ManyToOne
     @JoinColumn(name = "PARENT_POST_ID")
-    @JsonBackReference
+    @JsonBackReference(value = "post")
     private Post parent;
 
     // 자식 게시글 리스트
     @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
-    @JsonManagedReference
+    @JsonManagedReference(value = "post")
     private List<Post> children = new ArrayList<>();
 
     // 댓글 리스트
     @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
-    @JsonManagedReference
+    @JsonManagedReference(value = "post_comment")
     private List<Comment> comments = new ArrayList<>();
 
     public Post setLastModifyDate(LocalDateTime localDateTime) {

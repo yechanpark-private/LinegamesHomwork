@@ -12,4 +12,33 @@ import org.springframework.stereotype.Service;
 public class CommentService {
     @Autowired
     private CommentRepository postRepository;
+
+    /**
+     * {@link Comment} 객체를 저장
+     *
+     * @param comment 저장할 {@link Comment} 객체
+     * @return 저장된 {@link Comment} 객체
+     */
+    public Comment save(Comment comment) {
+        return postRepository.save(comment);
+    }
+
+    /**
+     * {@link Comment} 객체를 삭제
+     *
+     * @param comment 삭제할 {@link Comment} 객체
+     */
+    public void delete(Comment comment) {
+        postRepository.delete(comment);
+    }
+
+    /**
+     * id에 매치되는 {@link Comment} 객체를 반환
+     *
+     * @param commentId 반환할 {@link Comment}객체의 id값
+     * @return id에 매치되는 {@link Comment} 객체
+     */
+    public Comment findById(Long commentId) {
+        return postRepository.findById(commentId).orElse(null);
+    }
 }

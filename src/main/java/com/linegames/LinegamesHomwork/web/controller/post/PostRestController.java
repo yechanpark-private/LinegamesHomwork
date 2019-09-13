@@ -3,6 +3,7 @@ package com.linegames.LinegamesHomwork.web.controller.post;
 import com.linegames.LinegamesHomwork.commons.APIResponse;
 import com.linegames.LinegamesHomwork.commons.exception.ErrorCodeEnum;
 import com.linegames.LinegamesHomwork.commons.exception.api.APIException;
+import com.linegames.LinegamesHomwork.web.model.Board;
 import com.linegames.LinegamesHomwork.web.model.Post;
 import com.linegames.LinegamesHomwork.web.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,11 @@ public class PostRestController {
     private PostService postService;
 
     /**
-     * postId에 해당하는 Post를 삭제하는 api
+     * postId에 해당하는 {@link Post} 객체를 삭제하는 api
      *
-     * @param postId 삭제할 Post의 id
-     * @return APIResponse.data.post 삭제된 Post의 정보
-     *         APIResponse.data.boardURI 삭제된 Post가 포함된 Board의 URI Path
+     * @param postId 삭제할 {@link Post} 객체의 id
+     * @return APIResponse.data.post 삭제된 {@link Post} 객체의 정보
+     *         APIResponse.data.boardURI 삭제된 {@link Post} 객체가 포함된 {@link Board} 객체의 URI Path
      */
     @DeleteMapping("/{postId}")
     public APIResponse deletePost(@PathVariable("postId") Long postId) {

@@ -43,46 +43,72 @@
                         <a th:href="@{/post/update/} + ${post.id}" class="btn btn-warning">게시글 수정</a>
                         <a th:onclick="|deletePost(${post.id})|" class="btn btn-danger">게시글 삭제</a>
                     </th:block>
-
-
-                    <hr>
-
-                    <!-- Preview Image -->
-                    <img class="img-fluid rounded" src="http://placehold.it/900x300" alt="">
-
-                    <hr>
-
-                    <!-- Post Content -->
-                    <p class="lead" th:text="${post.content}"></p>
-
-                    <hr>
-
-                    <!-- Comments Form -->
-                    <th:block sec:authorize="isAuthenticated()">
-                        <div class="card my-4">
-                            <h5 class="card-header">Leave a Comment:</h5>
-                            <div class="card-body">
-                                <form method="post" th:action="@{/comment/} + ${post.id}">
-                                    <div class="form-group">
-                                        <textarea name="content" class="form-control" rows="3"></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </form>
-                            </div>
-                        </div>
-                    </th:block>
-
-                    <!-- 댓글 리스트 출력 -->
-                    <th:block th:each="comment : ${post.comments}">
-                        <div class="media mb-4">
-                            <!--<img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">-->
-                            <div class="media-body">
-                                <h5 class="mt-0" th:text="${comment.author.username}">Commenter Name</h5>
-                                <th:block th:text="${comment.content}"></th:block>
-                            </div>
-                        </div>
-                    </th:block>
                 </th:block>
+
+                <hr>
+
+                <!-- Preview Image -->
+                <img class="img-fluid rounded" src="http://placehold.it/900x300" alt="">
+
+                <hr>
+
+                <!-- Post Content -->
+                <p class="lead" th:text="${post.content}"></p>
+
+                <hr>
+
+                <!-- Comments Form -->
+                <th:block sec:authorize="isAuthenticated()">
+                    <div class="card my-4">
+                        <h5 class="card-header">Leave a Comment:</h5>
+                        <div class="card-body">
+                            <form method="post" th:action="@{/comment/} + ${post.id}">
+                                <div class="form-group">
+                                    <textarea name="content" class="form-control" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </th:block>
+
+                <!-- 댓글 리스트 출력 -->
+                <th:block th:each="comment : ${post.comments}">
+                    <div class="media mb-4">
+                        <!--<img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">-->
+                        <div class="media-body">
+                            <h5 class="mt-0" th:text="${comment.author.username}">Commenter Name</h5>
+
+                            <!-- 댓글 내용 표시 -->
+                            <div th:data-commentid="${comment.id}" class="commentContentDiv"
+                                 th:text="${comment.content}"></div>
+
+                            <!-- 인증된 유저만 보임 -->
+                            <th:block sec:authorize="isAuthenticated()">
+
+                                <!-- 수정할 댓글에 대한 입력창, 기본적으로 숨겨놓음 -->
+                                <div th:data-commentid="${comment.id}" class="commentModifyDiv" style="display:none">
+                                    <textarea th:data-commentid="${comment.id}" class="putContentTextArea form-control"
+                                              rows="3"></textarea>
+                                    <a th:onclick="|putComment(${comment.id})|" href="javascript:;">확인</a>
+                                    <a th:onclick="|clickPutCommentCancelButton(${comment.id})|"
+                                       href="javascript:;">취소</a>
+                                </div>
+
+                                <!-- ADMIN이거나 작성자 본인만 보임 -->
+                                <th:block
+                                        th:if="(${#authentication.principal.id} == ${comment.author.id}) OR ${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">
+                                    <div th:data-commentid="${comment.id}" class="putCommentPanelDiv">
+                                        <a th:onclick="|clickPutCommentButton(${comment.id})|"
+                                           href="javascript:;">수정</a>
+                                        <a th:onclick="|deleteComment(${comment.id})|" href="javascript:;">삭제</a>
+                                    </div>
+                                </th:block>
+                            </th:block>
+                        </div>
+                    </div>
+                </th:block>
+
             </div>
 
         </div>
@@ -91,13 +117,15 @@
     </main>
 
     <script>
+        let contextPath = $('#contextPathHolder').attr('data-contextPath');
+
+        // Post 삭제 요청
         function deletePost(postId) {
 
             let deleteConfirm = confirm("게시글을 삭제하시겠습니까?");
 
             // 글 삭제 확인
             if (deleteConfirm == true) {
-               let contextPath = $('#contextPathHolder').attr('data-contextPath');
 
                 $.ajax({
                     url: contextPath + '/post/rest/' + postId,
@@ -119,6 +147,112 @@
                 });
             }
         }
+
+        // Comment 수정 요청
+        function putComment(commentId) {
+            let putConfirm = confirm("댓글을 수정하시겠습니까?");
+
+            // 댓글 수정 확인
+            if (putConfirm == true) {
+                let modifiedCommentContent = $('.putContentTextArea[data-commentid=' + commentId + ']').val();
+
+                let commentData = {
+                    'content' : modifiedCommentContent
+                };
+
+                $.ajax({
+                    url: contextPath + '/comment/rest/' + commentId,
+                    type: 'put',
+                    contentType: 'application/json',
+                    data: JSON.stringify(commentData),
+                    success: function(result) {
+
+                        if( !result.errorCode ){
+                            alert('댓글이 수정되었습니다.');
+                            location.href = contextPath + '/post/' + result.data.postId;
+                        }
+
+                        else {
+                            alert(result.errorMessage);
+                        }
+                    },
+                    fail: function() {
+                        alert('댓글 수정 요청이 실패했습니다.');
+                    }
+                });
+            }
+        }
+
+        // Comment 삭제 요청
+        function deleteComment(commentId) {
+            let deleteConfirm = confirm("댓글을 삭제하시겠습니까?");
+
+            // 댓글 삭제 확인
+            if (deleteConfirm == true) {
+
+                $.ajax({
+                    url: contextPath + '/comment/rest/' + commentId,
+                    type: 'delete',
+                    success: function(result) {
+
+                        if( !result.errorCode ){
+                            alert('댓글이 삭제되었습니다.');
+                            location.href = contextPath + '/post/' + result.data.postId;
+                        }
+
+                        else {
+                            alert(result.errorMessage);
+                        }
+                    },
+                    fail: function() {
+                        alert('댓글 삭제 요청이 실패했습니다.');
+                    }
+                });
+            }
+        }
+
+        // 댓글 '수정' 버튼 클릭
+        function clickPutCommentButton(commentId) {
+
+            /** 가림 **/
+            // commentId에 해당하는 댓글 내용 창(commentContentDiv)
+            let commentContentDiv = $('.commentContentDiv[data-commentid=' + commentId + ']');
+            $(commentContentDiv).css("display", "none");
+
+            // 댓글 '수정', '삭제' 버튼이 있는 Div (putCommentPanelDiv)
+            let putCommentPanelDiv = $('.putCommentPanelDiv[data-commentid=' + commentId + ']');
+            $(putCommentPanelDiv).css("display", "none");
+
+
+            /** 보임 **/
+            // commentId에 해당하는 댓글 수정 Div (commentModifyDiv)
+            let commentModifyDiv = $('.commentModifyDiv[data-commentid=' + commentId + ']');
+
+            // commentId에 해당하는 댓글 수정 창 (putContentTextArea)
+            let putContentTextArea = $('.putContentTextArea[data-commentid=' + commentId + ']');
+
+            // 기존 댓글의 내용 (commentContentDiv)을 댓글 수정 창(putContentTextArea)에 붙임
+            $(putContentTextArea).html($(commentContentDiv).html());
+            $(commentModifyDiv).css("display", "");
+        }
+
+        // 댓글 수정 '취소' 버튼 클릭
+        function clickPutCommentCancelButton(commentId) {
+            /** 가림 **/
+            // commentId에 해당하는 댓글 수정 Div (commentModifyDiv)
+            let commentModifyDiv = $('.commentModifyDiv[data-commentid=' + commentId + ']');
+            $(commentModifyDiv).css("display", "none");
+
+            /** 보임 **/
+            // commentId에 해당하는 댓글 내용 창(commentContentDiv)
+            let commentContentDiv = $('.commentContentDiv[data-commentid=' + commentId + ']');
+            $(commentContentDiv).css("display", "");
+
+            // 댓글 '수정', '삭제' 버튼이 있는 Div (putCommentPanelDiv)
+            let putCommentPanelDiv = $('.putCommentPanelDiv[data-commentid=' + commentId + ']');
+            $(putCommentPanelDiv).css("display", "");
+        }
+
 
     </script>
 
