@@ -39,10 +39,10 @@
         </tr>
         </thead>
         <tbody>
-        <th:block th:switch="!${#lists.isEmpty(board.postList)}">
+        <th:block th:switch="!${#lists.isEmpty(parentPostList)}">
             <!-- 게시글이 해당 Board에 존재하는 경우 -->
             <th:block th:case="true">
-                <th:block th:each="post : ${board.postList}">
+                <th:block th:each="post : ${parentPostList}">
                     <tr class="table-row" th:onclick="|redirectToPost(${post.id})|">
                         <td scope="row" th:text="${post.id}"></td>
                         <td th:text="*{post.title}"></td>
@@ -58,7 +58,7 @@
                             <th:block th:each="post : ${children}">
                                 <!-- 답글 내용 -->
                                 <tr class="table-row" th:onclick="|redirectToPost(${post.id})|">
-                                    <td scope="row" th:text="${post.id}"></td>
+                                    <td scope="row"></td>
                                     <td>
                                         <th:block th:each="postDepth, iterator : ${#numbers.sequence(0, postDepth)}">
                                             &nbsp;
@@ -70,6 +70,7 @@
                                     </td>
                                     <td th:text="*{post.author.username}"></td>
                                     <td th:text="*{post.addDate}"></td>
+
                                 </tr>
 
                                 <!-- 자식Post를 thymeleaf 의 기능을 사용해 Recursive하게 출력 -->
@@ -90,6 +91,55 @@
         </th:block>
         </tbody>
     </table>
+
+    <!-- 비어있지 않은 경우에만 페이징 바 출력 -->
+    <!-- th:if는 조건이 true이면 출력 -->
+    <!-- th:unless는 조건이 true이면 미출력 -->
+    <th:block th:object="${parentPostList}">
+        <th:block th:unless="*{empty}">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+
+                    <!-- startPage : 페이징바 시작 번호 -->
+                    <!-- endPage : 페이징바 끝 번호 -->
+                    <!-- pageBarSize : 페이징바 번호 최대 갯수 -->
+                    <!-- pageable.pageNumber : 현재 페이지 인덱스 번호. page=1인 경우 0리턴 -->
+                    <!-- parentPostList.totalPages : 총 페이지 갯수 -->
+                    <th:block
+                            th:with="startPage = ${#numbers.formatDecimal(parentPostList.pageable.pageNumber / pageBarSize * pageBarSize + 1, 0, 0)  }">
+                        <th:block th:with="endPage = (${startPage} + ${pageBarSize} - 1)">
+
+                            <!-- 첫 번째 페이지면 'Previous' 버튼을 비활성화 -->
+                            <li class="page-item" th:classappend="*{first}?disabled">
+                                <!-- 페이징바 시작 번호 - pageBarSize로 이동-->
+                                <a class="page-link" href="#"
+                                   th:href="@{/board/__${board.boardURI}__?page=__${startPage} - ${pageBarSize}__}"
+                                   tabindex="-1">Previous</a>
+                            </li>
+
+                            <!-- Thymeleaf에서 2/3은 Integer 타입이 아니므로, #numbers.formatDecial(number, 0 ,0)을 사용해 정수로 만들어야 함 -->
+                            <!-- endPage가 totalPages보다 큰 경우(맨 끝 페이지 그룹에서 pageBarSize보다 적은 수의 페이지가 남았을 때) totalPages 만큼만 보여줌 -->
+                            <th:block
+                                    th:each="i : ${#numbers.sequence(startPage, parentPostList.totalPages < endPage ? parentPostList.totalPages : endPage)}">
+                                <!-- 현재 해당하는 페이지 버튼에 색칠 -->
+                                <li class="page-item" th:classappend="(*{pageable.pageNumber} == (${i} - 1)) ? active">
+                                    <a class="page-link" href="#" th:href="@{/board/__${board.boardURI}__?page=__${i}__}"
+                                       th:text="${i}"></a>
+                                </li>
+                            </th:block>
+
+                            <!-- 마지막 페이지면 'Next' 버튼을 비활성화-->
+                            <li class="page-item" th:classappend="*{last}?disabled">
+                                <!-- 페이징바 끝 번호 + 1 로 이동-->
+                                <a class="page-link" href="#" th:href="@{/board/__${board.boardURI}__?page=__${endPage} + 1__}">Next</a>
+                            </li>
+
+                        </th:block>
+                    </th:block>
+                </ul>
+            </nav>
+        </th:block>
+    </th:block>
 
     <script>
         function redirectToPost(postId) {

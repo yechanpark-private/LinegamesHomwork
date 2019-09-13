@@ -45,6 +45,21 @@ public class PostController {
 
         model.addAttribute("post", post);
 
+        Post currentPost = post;
+
+        // boardURI가 나올 때 까지 부모 Post를 올라가며 boardURI를 찾음
+        while (true) {
+
+            // 현재 Post가 Board의 자식인 경우 BoardURI를 세팅 후 break
+            if (currentPost.getBoard() != null) {
+                model.addAttribute("redirectBoardURI", currentPost.getBoard().getBoardURI());
+                break;
+            }
+
+            // board가 없으면 부모 Post를 세팅
+            currentPost = currentPost.getParent();
+        }
+
         return "contents/web/post/postView";
     }
 

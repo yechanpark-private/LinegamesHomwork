@@ -1,8 +1,11 @@
 package com.linegames.LinegamesHomwork.web.service;
 
+import com.linegames.LinegamesHomwork.web.model.CustomPageRequest;
 import com.linegames.LinegamesHomwork.web.model.Post;
 import com.linegames.LinegamesHomwork.web.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class PostService {
+
     @Autowired
     private PostRepository postRepository;
 
@@ -31,6 +35,16 @@ public class PostService {
      */
     public Post findById(Long id) {
         return postRepository.findById(id).orElse(null);
+    }
+
+    /**
+     * {@link PageRequest}의 정보에 따라 {@link Post}의 리스트를 반환
+     *
+     * @param pageRequest Paging 정보를 포함한 {@link CustomPageRequest} 객체
+     * @return Paging 정보에 따라 쿼리된 (페이징된) {@link Post} 리스트
+     */
+    public Page<Post> findAllByBoardId(Long boardId, PageRequest pageRequest) {
+        return this.postRepository.findAllByBoardId(boardId, pageRequest);
     }
 
     /**
