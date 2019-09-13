@@ -33,10 +33,11 @@ public class DataInitialClass {
     private PasswordEncoder passwordEncoder;
 
     /**
-     * ADMIN 계정 추가
+     * 게시판, 게시글 추가
      */
     @PostConstruct
-    public void addAdminAccount() {
+    public void addDefaultBoard() {
+        // ADMIN 계정 추가
         CustomUserDetails adminUserDetails = new CustomUserDetails();
         adminUserDetails.setAccountNonExpired(true);
         adminUserDetails.setAccountNonLocked(true);
@@ -50,23 +51,16 @@ public class DataInitialClass {
         authorities.add(AuthorityEnum.ADMIN.getAuthorityName());
         adminUserDetails.setAuthorities(authorities);
 
-        userDetailsService.save(adminUserDetails);
-    }
+        adminUserDetails = userDetailsService.save(adminUserDetails);
 
-    /**
-     * 게시판, 게시글 추가
-     */
-    @PostConstruct
-    public void addDefaultBoard() {
         // 게시판 추가
         Board board = new Board();
         board.setTitle("기본게시판");
         board.setBoardURI("default");
 
-        CustomUserDetails author = userDetailsService.loadUserByUsername("admin");
         // 부모 Post 추가
         Post post = new Post();
-        post.setAuthor(author);
+        post.setAuthor(adminUserDetails);
         post.setTitle("Default Post Title");
         post.setContent("Default Post Content");
         post.setAddDate(
@@ -80,21 +74,21 @@ public class DataInitialClass {
 
         // 부모 Post에 댓글1 추가
         Comment comment1 = new Comment();
-        comment1.setAuthor(author);
+        comment1.setAuthor(adminUserDetails);
         comment1.setContent("Default Comment1 Content");
         comment1.setPost(post);
         post.getComments().add(comment1);
 
         // 부모 Post에 댓글2 추가
         Comment comment2 = new Comment();
-        comment2.setAuthor(author);
+        comment2.setAuthor(adminUserDetails);
         comment2.setContent("Default Comment2 Content");
         comment2.setPost(post);
         post.getComments().add(comment2);
 
         // 자식 Post1 추가
         Post child1 = new Post();
-        child1.setAuthor(author);
+        child1.setAuthor(adminUserDetails);
         child1.setTitle("Default Child1 Post Title");
         child1.setContent("Default Child1 Post Content");
         child1.setAddDate(
@@ -108,7 +102,7 @@ public class DataInitialClass {
 
         // 자식 Post2 추가
         Post child2 = new Post();
-        child2.setAuthor(author);
+        child2.setAuthor(adminUserDetails);
         child2.setTitle("Default Child2 Post Title");
         child2.setContent("Default Child2 Post Content");
         child2.setAddDate(
@@ -122,7 +116,7 @@ public class DataInitialClass {
 
         // 자식 Post3 추가
         Post child3 = new Post();
-        child3.setAuthor(author);
+        child3.setAuthor(adminUserDetails);
         child3.setTitle("Default Child3 Post Title");
         child3.setContent("Default Child3 Post Content");
         child3.setAddDate(

@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       layout:decorate="~{layouts/layout}">
 
 <head>
@@ -34,47 +35,52 @@
                 <!-- 로그인한 사람만 수행 가능-->
                 <th:block sec:authorize="isAuthenticated()">
                     <a th:href="@{/post/add/child/} + ${post.id}" class="btn btn-warning">답글 달기</a>
-                    <!-- MEMBER : 자신이 쓴 글인 경우 가능 / ADMIN : 전부 가능 -->
-                    <!-- TODO : 수정 -->
-                    <a th:href="@{/post/update/} + ${post.id}" class="btn btn-warning">게시글 수정</a>
-                    <a th:onclick="|deletePost(${post.id})|" class="btn btn-danger">게시글 삭제</a>
-                </th:block>
-                <hr>
 
-                <!-- Preview Image -->
-                <img class="img-fluid rounded" src="http://placehold.it/900x300" alt="">
+                    <!-- 권한이 MEMBER인 경우에는 작성자 본인이거나, 권한이 ADMIN인 경우 접근 가능 -->
+                    <th:block
+                            th:if="(${#authentication.principal.id} == ${post.author.id}) OR ${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">
+                        <a th:href="@{/post/update/} + ${post.id}" class="btn btn-warning">게시글 수정</a>
+                        <a th:onclick="|deletePost(${post.id})|" class="btn btn-danger">게시글 삭제</a>
+                    </th:block>
 
-                <hr>
 
-                <!-- Post Content -->
-                <p class="lead" th:text="${post.content}"></p>
+                    <hr>
 
-                <hr>
+                    <!-- Preview Image -->
+                    <img class="img-fluid rounded" src="http://placehold.it/900x300" alt="">
 
-                <!-- Comments Form -->
-                <th:block sec:authorize="isAuthenticated()">
-                    <div class="card my-4">
-                        <h5 class="card-header">Leave a Comment:</h5>
-                        <div class="card-body">
-                            <form method="post" th:action="@{/comment/} + ${post.id}">
-                                <div class="form-group">
-                                    <textarea name="content" class="form-control" rows="3"></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </form>
+                    <hr>
+
+                    <!-- Post Content -->
+                    <p class="lead" th:text="${post.content}"></p>
+
+                    <hr>
+
+                    <!-- Comments Form -->
+                    <th:block sec:authorize="isAuthenticated()">
+                        <div class="card my-4">
+                            <h5 class="card-header">Leave a Comment:</h5>
+                            <div class="card-body">
+                                <form method="post" th:action="@{/comment/} + ${post.id}">
+                                    <div class="form-group">
+                                        <textarea name="content" class="form-control" rows="3"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                </th:block>
+                    </th:block>
 
-                <!-- 댓글 리스트 출력 -->
-                <th:block th:each="comment : ${post.comments}">
-                    <div class="media mb-4">
-                        <!--<img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">-->
-                        <div class="media-body">
-                            <h5 class="mt-0" th:text="${comment.author.username}">Commenter Name</h5>
-                            <th:block th:text="${comment.content}"></th:block>
+                    <!-- 댓글 리스트 출력 -->
+                    <th:block th:each="comment : ${post.comments}">
+                        <div class="media mb-4">
+                            <!--<img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">-->
+                            <div class="media-body">
+                                <h5 class="mt-0" th:text="${comment.author.username}">Commenter Name</h5>
+                                <th:block th:text="${comment.content}"></th:block>
+                            </div>
                         </div>
-                    </div>
+                    </th:block>
                 </th:block>
             </div>
 
@@ -112,8 +118,6 @@
                 });
             }
         }
-
-
 
     </script>
 
