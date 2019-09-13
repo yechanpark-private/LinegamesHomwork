@@ -10,6 +10,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.session.FindByIndexNameSessionRepository;
+import org.springframework.session.MapSessionRepository;
+import org.springframework.session.SessionRepository;
+import org.springframework.session.security.SpringSessionBackedSessionRegistry;
+import org.springframework.session.Session;
 
 /**
  * 보안 관련 설정
@@ -22,6 +27,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private FindByIndexNameSessionRepository sessionRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -69,6 +77,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers()
                     .frameOptions()
                     .disable();
+
+        // 중복 로그인 방지
+        http
+                .sessionManagement()
+                    .maximumSessions(1)
+                    .sessionRegistry(sessionRegistry()) // 중복 로그인 방지를 위해 반드시 sessionRegistry를 등록해야 함
+                    .maxSessionsPreventsLogin(true);
     }
 
     @Override
@@ -83,4 +98,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public SpringSessionBackedSessionRegistry<Session> sessionRegistry() {
+        return new SpringSessionBackedSessionRegistry<>(this.sessionRepository);
+    }
 }
