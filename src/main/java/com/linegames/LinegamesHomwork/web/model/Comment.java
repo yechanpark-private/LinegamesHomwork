@@ -1,6 +1,7 @@
 package com.linegames.LinegamesHomwork.web.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.linegames.LinegamesHomwork.auth.model.CustomUserDetails;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,9 @@ public class Comment {
     @Column(name = "COMMENT_ID")
     private Long id;
 
-    private String author;  // 작성한 유저 이름
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private CustomUserDetails author;
 
     @Column(length = 40000)
     private String content; // 댓글 내용

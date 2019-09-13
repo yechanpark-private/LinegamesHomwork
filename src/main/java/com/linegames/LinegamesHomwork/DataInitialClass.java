@@ -10,7 +10,6 @@ import com.linegames.LinegamesHomwork.web.model.Post;
 import com.linegames.LinegamesHomwork.web.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
@@ -25,7 +24,7 @@ import java.util.List;
 public class DataInitialClass {
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
     @Autowired
     private BoardService boardService;
@@ -51,7 +50,7 @@ public class DataInitialClass {
         authorities.add(AuthorityEnum.ADMIN.getAuthorityName());
         adminUserDetails.setAuthorities(authorities);
 
-        ((CustomUserDetailsService) userDetailsService).save(adminUserDetails);
+        userDetailsService.save(adminUserDetails);
     }
 
     /**
@@ -64,9 +63,10 @@ public class DataInitialClass {
         board.setTitle("기본게시판");
         board.setBoardURI("default");
 
+        CustomUserDetails author = userDetailsService.loadUserByUsername("admin");
         // 부모 Post 추가
         Post post = new Post();
-        post.setAuthor("Default Post Author");
+        post.setAuthor(author);
         post.setTitle("Default Post Title");
         post.setContent("Default Post Content");
         post.setAddDate(
@@ -80,21 +80,21 @@ public class DataInitialClass {
 
         // 부모 Post에 댓글1 추가
         Comment comment1 = new Comment();
-        comment1.setAuthor("Default Comment1 Author");
+        comment1.setAuthor(author);
         comment1.setContent("Default Comment1 Content");
         comment1.setPost(post);
         post.getComments().add(comment1);
 
         // 부모 Post에 댓글2 추가
         Comment comment2 = new Comment();
-        comment2.setAuthor("Default Comment2 Author");
+        comment2.setAuthor(author);
         comment2.setContent("Default Comment2 Content");
         comment2.setPost(post);
         post.getComments().add(comment2);
 
         // 자식 Post1 추가
         Post child1 = new Post();
-        child1.setAuthor("Default Child1 Post Author");
+        child1.setAuthor(author);
         child1.setTitle("Default Child1 Post Title");
         child1.setContent("Default Child1 Post Content");
         child1.setAddDate(
@@ -108,7 +108,7 @@ public class DataInitialClass {
 
         // 자식 Post2 추가
         Post child2 = new Post();
-        child2.setAuthor("Default Child2 Post Author");
+        child2.setAuthor(author);
         child2.setTitle("Default Child2 Post Title");
         child2.setContent("Default Child2 Post Content");
         child2.setAddDate(
@@ -122,7 +122,7 @@ public class DataInitialClass {
 
         // 자식 Post3 추가
         Post child3 = new Post();
-        child3.setAuthor("Default Child3 Post Author");
+        child3.setAuthor(author);
         child3.setTitle("Default Child3 Post Title");
         child3.setContent("Default Child3 Post Content");
         child3.setAddDate(

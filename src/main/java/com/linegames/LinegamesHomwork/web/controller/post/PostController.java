@@ -129,7 +129,7 @@ public class PostController {
         if (parentPost.getId() == null) {
             newParentPost = new Post();
             newParentPost.setAddDate(LocalDateTime.now());
-            newParentPost.setAuthor(customUserDetails.getUsername());
+            newParentPost.setAuthor(customUserDetails);
             newParentPost.setBoard(board);
         }
 
@@ -141,7 +141,7 @@ public class PostController {
             if (newParentPost == null) {
                 newParentPost = new Post();
                 newParentPost.setAddDate(LocalDateTime.now());
-                newParentPost.setAuthor(customUserDetails.getUsername());
+                newParentPost.setAuthor(customUserDetails);
                 newParentPost.setBoard(board);
             }
         }
@@ -168,7 +168,7 @@ public class PostController {
         Post newChildPost = new Post();
         newChildPost.setTitle(childPost.getTitle());
         newChildPost.setContent(childPost.getContent());
-        newChildPost.setAuthor(customUserDetails.getUsername());
+        newChildPost.setAuthor(customUserDetails);
         newChildPost.setLastModifyDate(CustomLocalDateTimeFormatter.getFormattedLocalDateTime(LocalDateTime.now()));
         newChildPost.setAddDate(CustomLocalDateTimeFormatter.getFormattedLocalDateTime(LocalDateTime.now()));
         newChildPost.setParent(parentPost);

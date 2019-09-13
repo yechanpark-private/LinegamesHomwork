@@ -49,7 +49,7 @@ public class CommentController {
         Comment newComment = new Comment();
         newComment.setPost(post);
         newComment.setContent(comment.getContent());
-        newComment.setAuthor(customUserDetails.getUsername());
+        newComment.setAuthor(customUserDetails);
         post.getComments().add(newComment);
 
         postService.save(post);

@@ -46,7 +46,7 @@
                     <tr class="table-row" th:onclick="|redirectToPost(${post.id})|">
                         <td scope="row" th:text="${post.id}"></td>
                         <td th:text="*{post.title}"></td>
-                        <td th:text="*{post.author}"></td>
+                        <td th:text="*{post.author.username}"></td>
                         <td th:text="*{post.addDate}"></td>
                     </tr>
 
@@ -68,7 +68,7 @@
 
                                         </th:block>
                                     </td>
-                                    <td th:text="*{post.author}"></td>
+                                    <td th:text="*{post.author.username}"></td>
                                     <td th:text="*{post.addDate}"></td>
                                 </tr>
 

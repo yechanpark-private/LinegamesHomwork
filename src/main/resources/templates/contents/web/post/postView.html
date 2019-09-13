@@ -22,7 +22,7 @@
                 <!-- Title -->
                 <h1 class="mt-4" th:text="${post.title}">Post Title</h1>
                 <!-- Author -->
-                <p class="lead">by <span th:text="${post.author}">Author</span></p>
+                <p class="lead">by <span th:text="${post.author.username}">Author</span></p>
 
                 <hr>
 
@@ -71,7 +71,7 @@
                     <div class="media mb-4">
                         <!--<img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">-->
                         <div class="media-body">
-                            <h5 class="mt-0" th:text="${comment.author}">Commenter Name</h5>
+                            <h5 class="mt-0" th:text="${comment.author.username}">Commenter Name</h5>
                             <th:block th:text="${comment.content}"></th:block>
                         </div>
                     </div>

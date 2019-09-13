@@ -2,6 +2,7 @@ package com.linegames.LinegamesHomwork.web.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.linegames.LinegamesHomwork.auth.model.CustomUserDetails;
 import com.linegames.LinegamesHomwork.commons.util.CustomLocalDateTimeFormatter;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +24,9 @@ public class Post {
     @Column(name = "POST_ID")
     private Long id;
 
-    private String author;  // 작성한 유저 이름
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private CustomUserDetails author;  // 작성한 유저 객체
 
     private String title; // 게시글 제목
 
