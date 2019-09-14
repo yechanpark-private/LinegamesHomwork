@@ -53,8 +53,6 @@ public class UserController {
         userDetailsService.save(customUserDetails);
 
         // 업데이트에 성공하면 SecurityContextHolder에 있는 Authentication을 업데이트
-        // TODO : 리퀘스트가 올 때마다 userService에서 정보를 받아서 갱신하도록 변경
-        //        현재는 정보가 바뀐 후 다른 브라우저에서는 갱신되지 않고, 이 로직을 수행한 서버에서만 반영됨
         Authentication newAuthentication
                 = new UsernamePasswordAuthenticationToken(customUserDetails, authentication.getCredentials(), customUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuthentication);

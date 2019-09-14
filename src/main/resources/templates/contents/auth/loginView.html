@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
-                <h3 class="kpx_authTitle">Login or <a href="#" th:href="@{/auth/signup}">Sign up</a></h3>
+                <h3 class="kpx_authTitle">Login or <a th:href="@{/auth/signup}">Sign up</a></h3>
                 <hr>
             </div>
         </div>
@@ -25,11 +25,19 @@
                 <div class="col-md-6">
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                         <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
-                        <input id="usernameInput" type="text" class="form-control" name="username"
+                        <input id="usernameInput" type="text" class="form-control" name="username" th:value="${username}"
                                placeholder="Username">
                     </div>
+                    <th:block th:if="${login_validation_error_username} != null">
+                        <div class="form-control-feedback">
+                        <span class="text-danger align-middle">
+                            <i class="fa fa-close" th:text="${login_validation_error_username}"></i>
+                        </span>
+                        </div>
+                    </th:block>
                     <hr/>
                 </div>
+
             </div>
 
             <div class="row">
@@ -39,14 +47,19 @@
                 <div class="col-md-6">
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                         <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
-                        <input id="passwordInput" type="text" class="form-control" name="password"
+                        <input id="passwordInput" type="password" class="form-control" name="password"
                                placeholder="Password">
                     </div>
-                    <span class="tag tag-danger">Password Error!</span> | <span
-                        class="tag tag-success">Login success!</span>
-                    | <span class="tag tag-warning">Some of password must not be empty!</span>
+                    <th:block th:if="${login_validation_error_password} != null">
+                        <div class="form-control-feedback">
+                        <span class="text-danger align-middle">
+                            <i class="fa fa-close" th:text="${login_validation_error_password}"></i>
+                        </span>
+                        </div>
+                    </th:block>
                     <hr/>
                 </div>
+
             </div>
 
             <div class="row">

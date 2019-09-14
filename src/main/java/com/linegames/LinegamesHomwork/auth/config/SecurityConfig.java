@@ -1,6 +1,7 @@
 package com.linegames.LinegamesHomwork.auth.config;
 
 import com.linegames.LinegamesHomwork.auth.model.AuthorityEnum;
+import com.linegames.LinegamesHomwork.auth.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,11 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.session.FindByIndexNameSessionRepository;
-import org.springframework.session.MapSessionRepository;
-import org.springframework.session.SessionRepository;
-import org.springframework.session.security.SpringSessionBackedSessionRegistry;
 import org.springframework.session.Session;
+import org.springframework.session.security.SpringSessionBackedSessionRegistry;
 
 /**
  * 보안 관련 설정
@@ -23,13 +23,19 @@ import org.springframework.session.Session;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
-     * {@link com.linegames.LinegamesHomwork.auth.service.CustomUserDetailsService}
+     * {@link CustomUserDetailsService}
      */
     @Autowired
     private UserDetailsService userDetailsService;
 
     @Autowired
     private FindByIndexNameSessionRepository sessionRepository;
+
+    /**
+     * {@link CustomAuthenticationFailureHandler}
+     */
+    @Autowired
+    private AuthenticationFailureHandler authenticationFailureHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -39,6 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .disable()
 
                 .authorizeRequests()
+                    .antMatchers("/login")
+                        .permitAll()
+
                     // ADMIN 만 접근 가능
                     .antMatchers("/admin/**")
                         .hasAnyAuthority(AuthorityEnum.ADMIN.getAuthorityName())
@@ -61,11 +70,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .formLogin()
                     .loginPage("/auth/login")
+                    .loginProcessingUrl("/auth/login")
+                    .failureHandler(authenticationFailureHandler)
                     .permitAll()
                     .and()
 
                 .logout()
-                    .logoutUrl("/auth/logout")
+                    .logoutUrl("/logout")
                     .logoutSuccessUrl("/")
                     .permitAll();
 
