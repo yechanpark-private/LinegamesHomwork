@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layouts/layout}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -9,11 +9,132 @@
 <body>
 
 <div layout:fragment="content">
-    <ul>
-<!--        <th:block th:each="board : ${boardList}">
-            <li th:text="${board.boardTitle}"></li>
-        </th:block>-->
-    </ul>
+    <link th:rel="stylesheet" th:href="@{/webjars/highlightjs/9.12.0/styles/github.css}"/>
+    <script th:src="@{/webjars/highlightjs/9.12.0/highlight.pack.min.js}"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <div class="container my-5 p-5">
+
+        <h2>Linegames Homework</h2>
+
+        <h3>1. 기능 설명</h3>
+        <ul>
+            <li>인증</li>
+            <ul>
+                <li>로그인</li>
+                <ul>
+                    <li>로그인 Validation</li>
+                    <ul>
+                        <li>username이 존재하지 않는 경우</li>
+                        <li>password가 틀린 경우</li>
+                    </ul>
+                    <li>동일 username 중복 로그인 방지</li>
+                </ul>
+            </ul>
+            <ul>
+                <li>회원가입</li>
+                <ul>
+                    <li>회원가입 Validation</li>
+                    <ul>
+                        <li>username기준 중복 가입 불가</li>
+                    </ul>
+                </ul>
+            </ul>
+            <ul>
+                <li>권한</li>
+                <ul>
+                    <li>MEMBER (일반 사용자, 회원가입 시 Default)</li>
+                    <li>ADMIN (관리자)</li>
+                </ul>
+            </ul>
+            <ul>
+                <li>패스워드 찾기</li>
+                <ul>
+                    <li>패스워드 변경</li>
+                </ul>
+            </ul>
+            <ul>
+                <li>내 계정 정보 수정</li>
+                <ul>
+                    <li>username 변경</li>
+                </ul>
+            </ul>
+
+            <li>게시판</li>
+            <ul>
+                <li>게시판 추가</li>
+            </ul>
+            <ul>
+                <li>게시판 관리 (ADMIN 기능)</li>
+                <ul>
+                    <li>게시판 Title 수정</li>
+                    <li>게시판 URI 수정</li>
+                    <li>게시판 공개/비공개 설정</li>
+                    <ul>
+                        <li>비공개 게시판 : ADMIN만 조회 가능</li>
+                    </ul>
+                </ul>
+            </ul>
+
+            <li>게시글</li>
+            <ul>
+                <li>게시글 CRUD</li>
+                <ul>
+                    <li>게시글 조회</li>
+                    <li>게시글 등록</li>
+                    <ul>
+                        <li>권한 : MEMBER, ADMIN</li>
+                    </ul>
+                    <li>게시글 수정</li>
+                    <ul>
+                        <li>권한 : MEMBER(본인의 글만 수정 가능), ADMIN</li>
+                    </ul>
+                    <li>게시글 삭제</li>
+                    <ul>
+                        <li>권한 : MEMBER(본인의 글만 삭제 가능), ADMIN</li>
+                    </ul>
+                    <li>게시글 답글 작성</li>
+                </ul>
+            </ul>
+            <ul>
+                <li>게시글 페이징</li>
+                <ul>
+                    <li>최상위 부모 게시글을 기준으로 페이징</li>
+                    <ul>
+                        <li>자식 게시글(답글)은 페이징 기준으로 삼지 않음</li>
+                    </ul>
+                    <li>페이징 바</li>
+                    <ul>
+                        <li>페이지 번호 기반 조회버튼</li>
+                        <li>Next / Previous 조회버튼</li>
+                    </ul>
+                </ul>
+            </ul>
+
+            <li>댓글</li>
+            <ul>
+                <li>댓글 CRUD</li>
+                <ul>
+                    <li>댓글 조회</li>
+                    <li>댓글 등록</li>
+                    <ul>
+                        <li>권한 : MEMBER, ADMIN</li>
+                    </ul>
+                    <li>댓글 수정</li>
+                    <ul>
+                        <li>권한 : MEMBER(본인의 댓글만 수정 가능), ADMIN</li>
+                    </ul>
+                    <li>댓글 삭제</li>
+                    <ul>
+                        <li>권한 : MEMBER(본인의 댓글만 삭제 가능), ADMIN</li>
+                    </ul>
+                </ul>
+            </ul>
+        </ul>
+
+    </div>
+
+
 </div>
 
 </body>

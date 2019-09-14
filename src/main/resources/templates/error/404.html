@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:rel="stylesheet" th:href="@{/webjars/highlightjs/9.12.0/styles/github.css}"/>
+    <script th:src="@{/webjars/highlightjs/9.12.0/highlight.pack.min.js}"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <title>404 Error Page</title>
+</head>
+<body>
+<h1> Error 404 ! </h1>
+
+"<span th:text="${#request.getAttribute('javax.servlet.forward.request_uri')}"></span>"에 매핑된 페이지를 찾을 수 없습니다. ㅎㅎ
+
+<pre><code class="Java">
+@RequestMapping("/")
+public String home() {
+    return "home";
+}
+    </code></pre>
+<p>을 실행시키려면 티모 사진을 눌러주세요. <^오^> </p>
+
+<a th:href="@{/}">
+    <img th:src="@{/resources/img/teemo/fly_teemo.gif}">
+</a>
+
+</body>
+</html>

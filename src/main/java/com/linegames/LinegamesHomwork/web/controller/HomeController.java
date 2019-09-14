@@ -24,9 +24,7 @@ public class HomeController {
      * 메인 홈페이지
      */
     @GetMapping("")
-    public String home(Model model) {
-        List<Board> boardList = boardService.findAll();
-        model.addAttribute("boardList", boardList);
+    public String home() {
         return "contents/web/home";
     }
 }
