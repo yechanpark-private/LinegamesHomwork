@@ -41,6 +41,7 @@ public class CommentRestController {
      *
      * @param commentId 삭제할 {@link Comment} 객체의 id
      * @return APIResponse.data.comment 삭제된 {@link Comment}의 정보
+     *         APIResponse.data.postId comment 삭제 후 돌아갈 게시글의 id
      */
     @DeleteMapping("/{commentId}")
     public APIResponse deleteComment(@PathVariable("commentId") Long commentId) {

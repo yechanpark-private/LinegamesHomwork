@@ -25,11 +25,18 @@
                 <ul>
                     <li>로그인 Validation</li>
                     <ul>
-                        <li>username이 존재하지 않는 경우</li>
-                        <li>password가 틀린 경우</li>
+                        <li>로그인 실패 시 로그인창으로 리다이렉션, 실패 이유 Error Meessage 출력</li>
+                        <ul>
+                            <li>username이 존재하지 않는 경우</li>
+                            <li>password가 틀린 경우</li>
+                            <li>username은 기존 값 유지</li>
+                        </ul>
                     </ul>
                     <li>동일 username 중복 로그인 방지</li>
                 </ul>
+            </ul>
+            <ul>
+                <li>로그아웃</li>
             </ul>
             <ul>
                 <li>회원가입</li>
@@ -37,6 +44,9 @@
                     <li>회원가입 Validation</li>
                     <ul>
                         <li>username기준 중복 가입 불가</li>
+                    </ul>
+                    <ul>
+                        <li>패스워드 암호화 저장</li>
                     </ul>
                 </ul>
             </ul>
@@ -50,7 +60,7 @@
             <ul>
                 <li>패스워드 찾기</li>
                 <ul>
-                    <li>패스워드 변경</li>
+                    <li>username기반 패스워드 변경</li>
                 </ul>
             </ul>
             <ul>
@@ -62,7 +72,7 @@
 
             <li>게시판</li>
             <ul>
-                <li>게시판 추가</li>
+                <li>게시판 종류 추가</li>
             </ul>
             <ul>
                 <li>게시판 관리 (ADMIN 기능)</li>
@@ -75,12 +85,58 @@
                     </ul>
                 </ul>
             </ul>
+            <ul>
+                <li>게시글 페이징</li>
+                <ul>
+                    <li>최상위 부모 게시글을 기준으로 페이징</li>
+                    <ul>
+                        <li>페이징 기준은 글 작성 시간이 가장 최근인 것부터 시작 (등록시간 내림차순 정렬)</li>
+                        <li>자식 게시글(답글)은 페이징 기준으로 삼지 않음</li>
+                    </ul>
+                    <li>페이징 바</li>
+                    <ul>
+                        <li>페이지 번호 기반 조회</li>
+                        <ul>
+                            <li>Query String Parameter를 통한 페이징</li>
+                        </ul>
+                        <li>Next / Previous 조회</li>
+                        <ul>
+                            <li>한 게시판에서 최대로 보여줄 수 있는 최대 페이지는 5페이지 (편의 상 적게 설정)</li>
+                            <ul>
+                                <li>6페이지부터는 Next버튼을 통해 다음 페이지 셋으로 이동해야 함</li>
+                            </ul>
+                            <li>한 페이지에서 최대로 보여주는 게시글은 2개 (편의 상 적게 설정)</li>
+                            <ul>
+                                <li>ex. 5개 페이지 x 페이지 당 2개 게시글 = 10개의 게시글이 존재</li>
+                            </ul>
+                            <li>Next : 현재 페이지 + 최대 페이지 갯수 만큼 다음 페이지로 이동</li>
+                            <ul>
+                                <li>ex. 1페이지 + 최대 페이지 갯수 (5) = 6페이지로 이동</li>
+                            </ul>
+                            <li>Previous : 현재 페이지 - 최대 페이지 갯수 만큼 이전 페이지로 이동</li>
+                            <ul>
+                                <li>ex. 6페이지 - 최대 페이지 갯수 (5) = 1페이지로 이동</li>
+                            </ul>
+                        </ul>
+                    </ul>
+                </ul>
+            </ul>
 
             <li>게시글</li>
+            <ul>
+                <li>게시판 리스트로 돌아가기</li>
+            </ul>
             <ul>
                 <li>게시글 CRUD</li>
                 <ul>
                     <li>게시글 조회</li>
+                    <ul>
+                        <li>제목</li>
+                        <li>내용</li>
+                        <li>작성자</li>
+                        <li>작성시간</li>
+                        <li>댓글조회</li>
+                    </ul>
                     <li>게시글 등록</li>
                     <ul>
                         <li>권한 : MEMBER, ADMIN</li>
@@ -96,26 +152,16 @@
                     <li>게시글 답글 작성</li>
                 </ul>
             </ul>
-            <ul>
-                <li>게시글 페이징</li>
-                <ul>
-                    <li>최상위 부모 게시글을 기준으로 페이징</li>
-                    <ul>
-                        <li>자식 게시글(답글)은 페이징 기준으로 삼지 않음</li>
-                    </ul>
-                    <li>페이징 바</li>
-                    <ul>
-                        <li>페이지 번호 기반 조회버튼</li>
-                        <li>Next / Previous 조회버튼</li>
-                    </ul>
-                </ul>
-            </ul>
 
             <li>댓글</li>
             <ul>
                 <li>댓글 CRUD</li>
                 <ul>
                     <li>댓글 조회</li>
+                    <ul>
+                        <li>내용</li>
+                        <li>작성자</li>
+                    </ul>
                     <li>댓글 등록</li>
                     <ul>
                         <li>권한 : MEMBER, ADMIN</li>

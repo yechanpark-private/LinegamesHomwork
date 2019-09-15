@@ -29,8 +29,8 @@ public class CommentController {
     /**
      * 댓글 추가 로직
      *
-     * @param postId            댓글을 추가할 게시글({@link com.linegames.LinegamesHomwork.web.model.Post}의 id값
-     * @param comment           postId에 매치되는 {@link com.linegames.LinegamesHomwork.web.model.Post}객체에 추가할 댓글({@link Comment}) 객체
+     * @param postId            댓글을 추가할 게시글({@link Post}의 id값
+     * @param comment           postId에 매치되는 {@link Post}객체에 추가할 댓글({@link Comment}) 객체
      * @param customUserDetails 현재 로그인한 유저의 정보를 담은 {@link CustomUserDetails} 정보
      * @return 댓글이 추가된 게시글 리다이렉션 URI
      */
