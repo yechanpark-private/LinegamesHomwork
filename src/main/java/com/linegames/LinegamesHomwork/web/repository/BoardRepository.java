@@ -4,6 +4,7 @@ import com.linegames.LinegamesHomwork.web.model.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -11,6 +12,7 @@ import java.util.List;
  * @see <a href="https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation">Spring Data JPA - Reference Documentation - 5.3.2. Query Creation</a>
  */
 @Repository
+@Transactional
 public interface BoardRepository extends JpaRepository<Board, Long> {
     Board findByBoardURI(String boardURI);
     List<Board> findByActivated(boolean activated);
