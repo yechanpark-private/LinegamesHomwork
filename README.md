@@ -125,6 +125,13 @@ java -jar LinegamesHomwork-0.0.1-SNAPSHOT.jar
       - 권한 : MEMBER(본인의 댓글만 삭제 가능), ADMIN
     
  ## Caution
+ ### 필수 구현사항 중 참고사항
+  - 자바 1.8 사용
+  - 서버는 REST API를 사용하라는 구현조건에 대해서, 몇몇 기능은 form을 통해 처리되도록 구현함
+    - 처음에는 필수 구현사항에 따라 모든 처리를 전부 REST API를 통해 구현하도록 설계함
+    - 그러나 @ModelAttribute 혹은 Thymeleaf-Form 연계에 대한 이해도 역시 강조하고자 form 기반 처리 역시 사용
+      - 처리방식에 대해 일관성이 없어 보인다고 판단할 수 있으나, 의도한 바가 있으므로 해당 사항 참고하여 평가바람
+  
  ### Clone & Build
   - 프로젝트는 Git을 사용해 Clone해야 하므로 Git이 설치되어 있어야 함
   - 빌드는 gradle을 사용해서 Build해야 하므로 gradle이 설치되어 있어야 함
